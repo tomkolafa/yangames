@@ -1,0 +1,36 @@
+/* ============================================================
+   WORDLING — KEYFRAMES (global, used by game components)
+   ============================================================ */
+
+@keyframes wl-pop {
+  0%   { transform: scale(1); }
+  45%  { transform: scale(1.10); }
+  100% { transform: scale(1); }
+}
+
+@keyframes wl-reveal {
+  0%   { transform: rotateX(0); }
+  50%  { transform: rotateX(90deg); }
+  100% { transform: rotateX(0); }
+}
+
+@keyframes wl-shake {
+  10%, 90% { transform: translateX(-2px); }
+  20%, 80% { transform: translateX(4px); }
+  30%, 50%, 70% { transform: translateX(-7px); }
+  40%, 60% { transform: translateX(7px); }
+}
+
+@keyframes wl-bounce {
+  0%, 20% { transform: translateY(0); }
+  40%     { transform: translateY(-26px); }
+  50%     { transform: translateY(4px); }
+  60%     { transform: translateY(-12px); }
+  80%     { transform: translateY(2px); }
+  100%    { transform: translateY(0); }
+}
+
+@keyframes wl-float {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50%      { transform: translateY(-10px) rotate(2deg); }
+}

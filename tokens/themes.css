@@ -1,0 +1,172 @@
+/* ============================================================
+   WORDLING — THEMES
+   Skinnable game tokens. Components read these variables and
+   reskin automatically. Switch with [data-theme] on any ancestor.
+
+   Themes:
+     :root / clean-light  → soft, minimal, light (DEFAULT)
+     clean-dark           → soft, minimal, dark
+     classic              → editorial newspaper homage
+     funky                → colorful candy / rainbow skin
+
+   GAME TOKEN CONTRACT (read by Tile / Board / Keyboard):
+     --game-bg / --game-text
+     --title-font / --title-weight / --title-spacing / --title-color / --title-transform
+     --tile-radius / --tile-gap / --tile-text / --tile-weight
+     --tile-empty-bg / --tile-empty-border
+     --tile-filled-bg / --tile-filled-border / --tile-shadow
+     --state-correct-bg/text · --state-present-bg/text · --state-absent-bg/text
+     --key-bg / --key-text / --key-radius / --key-shadow
+     --key-correct-bg / --key-present-bg / --key-absent-bg / --key-absent-text
+   ============================================================ */
+
+/* ---------- DEFAULT = CLEAN LIGHT ---------- */
+:root,
+[data-theme="clean-light"] {
+  --game-bg:        var(--paper);
+  --game-text:      var(--ink);
+
+  --title-font:     var(--font-display);
+  --title-weight:   700;
+  --title-spacing:  0.01em;
+  --title-color:    var(--ink);
+  --title-transform:none; /* @kind other */
+
+  --tile-radius:    var(--radius-md);
+  --tile-gap:       8px;
+  --tile-text:      var(--ink);
+  --tile-weight:    700;
+
+  --tile-empty-bg:     #FFFFFF;
+  --tile-empty-border: #E7E0D5;
+  --tile-filled-bg:    #FFFFFF;
+  --tile-filled-border:#CFC6B8;
+  --tile-shadow:       0 2px 4px rgba(46,42,40,.06);
+
+  --state-correct-bg:  #5BC48A;  --state-correct-text: #FFFFFF;
+  --state-present-bg:  #F2C45A;  --state-present-text: #FFFFFF;
+  --state-absent-bg:   #CFC8BD;  --state-absent-text:  #FFFFFF;
+
+  --key-bg:        #FFFFFF;
+  --key-text:      var(--ink);
+  --key-radius:    10px;
+  --key-shadow:    0 2px 0 rgba(46,42,40,.12);
+  --key-correct-bg:#5BC48A;
+  --key-present-bg:#F2C45A;
+  --key-absent-bg: #B9B1A6;  --key-absent-text:#FFFFFF;
+}
+
+/* ---------- CLEAN DARK ---------- */
+[data-theme="clean-dark"] {
+  --game-bg:        #2B2A28;
+  --game-text:      #F4F1EC;
+
+  --title-font:     var(--font-display);
+  --title-weight:   700;
+  --title-spacing:  0.01em;
+  --title-color:    #F4F1EC;
+  --title-transform:none; /* @kind other */
+
+  --tile-radius:    var(--radius-md);
+  --tile-gap:       8px;
+  --tile-text:      #F4F1EC;
+  --tile-weight:    700;
+
+  --tile-empty-bg:     #363432;
+  --tile-empty-border: #4A4744;
+  --tile-filled-bg:    #3E3B38;
+  --tile-filled-border:#5C5854;
+  --tile-shadow:       0 2px 5px rgba(0,0,0,.30);
+
+  --state-correct-bg:  #56C98A;  --state-correct-text: #15110F;
+  --state-present-bg:  #E9BF54;  --state-present-text: #15110F;
+  --state-absent-bg:   #4A4744;  --state-absent-text:  #C9C3BB;
+
+  --key-bg:        #46433F;
+  --key-text:      #F4F1EC;
+  --key-radius:    10px;
+  --key-shadow:    0 2px 0 rgba(0,0,0,.40);
+  --key-correct-bg:#56C98A;
+  --key-present-bg:#E9BF54;
+  --key-absent-bg: #2F2D2B;  --key-absent-text:#7E7872;
+}
+
+/* ---------- CLASSIC (editorial / newspaper homage) ---------- */
+[data-theme="classic"] {
+  --game-bg:        #FFFFFF;
+  --game-text:      #1A1A1B;
+
+  --title-font:     var(--font-slab);
+  --title-weight:   700;
+  --title-spacing:  0.005em;
+  --title-color:    #1A1A1B;
+  --title-transform:none; /* @kind other */
+
+  --tile-radius:    2px;          /* crisp, square */
+  --tile-gap:       5px;
+  --tile-text:      #1A1A1B;
+  --tile-weight:    700;
+
+  --tile-empty-bg:     #FFFFFF;
+  --tile-empty-border: #D3D6DA;
+  --tile-filled-bg:    #FFFFFF;
+  --tile-filled-border:#878A8C;
+  --tile-shadow:       none;
+
+  --state-correct-bg:  #6AAA64;  --state-correct-text: #FFFFFF;
+  --state-present-bg:  #C9B458;  --state-present-text: #FFFFFF;
+  --state-absent-bg:   #787C7E;  --state-absent-text:  #FFFFFF;
+
+  --key-bg:        #D3D6DA;
+  --key-text:      #1A1A1B;
+  --key-radius:    4px;
+  --key-shadow:    none;
+  --key-correct-bg:#6AAA64;
+  --key-present-bg:#C9B458;
+  --key-absent-bg: #787C7E;  --key-absent-text:#FFFFFF;
+}
+
+/* ---------- FUNKY (colorful candy / rainbow skin) ---------- */
+[data-theme="funky"] {
+  --game-bg:        #2C3A4B;   /* deep slate */
+  --game-text:      #FFFFFF;
+
+  --title-font:     var(--font-display);
+  --title-weight:   700;
+  --title-spacing:  0.02em;
+  --title-color:    #FFFFFF;     /* per-letter rainbow applied in component */
+  --title-transform:uppercase; /* @kind other */
+
+  --tile-radius:    14px;        /* rounded candy */
+  --tile-gap:       8px;
+  --tile-text:      #FFFFFF;
+  --tile-weight:    700;
+
+  --tile-empty-bg:     #FFFFFF;
+  --tile-empty-border: transparent;
+  --tile-filled-bg:    #FFFFFF;
+  --tile-filled-border:transparent;
+  --tile-shadow:       0 4px 10px rgba(0,0,0,.22);
+
+  /* In funky, evaluated tiles are colored by COLUMN (rainbow) via the
+     component, but the semantic states still resolve to candy hues. */
+  --state-correct-bg:  #7FD1AE;  --state-correct-text: #15321F;
+  --state-present-bg:  #F4D35E;  --state-present-text: #4A3B05;
+  --state-absent-bg:   #5A6A7C;  --state-absent-text:  #C6D0DB;
+
+  --key-bg:        #3C4D60;
+  --key-text:      #FFFFFF;
+  --key-radius:    8px;
+  --key-shadow:    0 2px 0 rgba(0,0,0,.30);
+  --key-correct-bg:#7FD1AE;
+  --key-present-bg:#F4D35E;
+  --key-absent-bg: #28333F;  --key-absent-text:#6E7D8C;
+
+  /* Candy palette — used for the rainbow logotype + funky rainbow tiles */
+  --funky-1: #F58BB0;  /* pink */
+  --funky-2: #F6A95C;  /* orange */
+  --funky-3: #F4D35E;  /* yellow */
+  --funky-4: #7FD1AE;  /* mint */
+  --funky-5: #7FB7E8;  /* sky */
+  --funky-6: #B79CE0;  /* lavender */
+}

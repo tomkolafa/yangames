@@ -1,0 +1,56 @@
+/* ============================================================
+   WORDLING — COLORS
+   Base palette + soft brand hues + semantic aliases.
+   Game-feedback + theme-specific values live in themes.css.
+   ============================================================ */
+
+:root {
+  /* ---- Neutrals (warm paper, not pure white/black) ---- */
+  --paper:        #FBF7F0;  /* app background — warm cream */
+  --paper-2:      #F3ECE0;  /* sunken surfaces */
+  --card:         #FFFFFF;  /* raised card surface */
+  --ink:          #2E2A28;  /* primary text — soft near-black */
+  --ink-2:        #6B635E;  /* secondary text */
+  --ink-3:        #A79E97;  /* tertiary / placeholder */
+  --hairline:     #EBE3D7;  /* soft borders */
+
+  /* ---- Soft brand hues (the illustrated, friendly palette) ---- */
+  --coral:        #E8755C;  /* PRIMARY brand — warm terracotta */
+  --coral-deep:   #C65C42;  /* pressed / deep coral bg */
+  --coral-soft:   #F6C7B4;  /* tints, fills */
+  --peach:        #F8D2BC;
+
+  --mint:         #8FD3B6;
+  --mint-soft:    #C9EBDA;
+  --sage:         #B7DFC9;
+
+  --lavender:     #C7B6E8;
+  --lavender-soft:#E5DCF6;
+
+  --butter:       #F4D58D;
+  --butter-soft:  #FBEDC6;
+
+  --sky:          #A7D3E8;
+  --sky-soft:     #D6ECF6;
+
+  --blush:        #F2A9C4;
+  --blush-soft:   #FAD7E5;
+
+  /* ---- Semantic aliases (consume these in components) ---- */
+  --bg-app:        var(--paper);
+  --bg-sunken:     var(--paper-2);
+  --surface-card:  var(--card);
+  --text-strong:   var(--ink);
+  --text-body:     var(--ink-2);
+  --text-muted:    var(--ink-3);
+  --border-soft:   var(--hairline);
+
+  --brand:         var(--coral);
+  --brand-press:   var(--coral-deep);
+  --brand-tint:    var(--coral-soft);
+  --on-brand:      #FFFFFF;
+
+  --accent-success:#5AB98A;
+  --accent-warn:   #E8A14C;
+  --accent-error:  #E2664F;
+}

@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>YanGames — Yandl &amp; Rundl</title>
+<meta name="theme-color" content="#FBF7F0" />
+<meta name="description" content="YanGames — a tiny collection of daily games. Play Yandl and Rundl." />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="YanGames" />
+<link rel="manifest" href="/manifest.webmanifest" />
+<link rel="icon" href="/icon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/icon-180.png" />
+<script src="/pwa.js" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;500;600;700;800&family=Zilla+Slab:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; min-height: 100%; background: var(--bg-app); }
+  body { overscroll-behavior: none; }
+  button { -webkit-tap-highlight-color: transparent; }
+
+  @keyframes welcome-float {
+    0%, 100% { transform: translateY(0px); }
+    50%      { transform: translateY(-6px); }
+  }
+  @keyframes welcome-wobble {
+    0%, 100% { transform: rotate(0deg); }
+    25%      { transform: rotate(-3deg); }
+    75%      { transform: rotate(3deg); }
+  }
+  @keyframes welcome-bounce {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50%      { transform: translateY(-5px) scale(1.03); }
+  }
+  @keyframes card-shimmer {
+    0%   { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+</style>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+
+function TileLogo({ letters, colors, size }) {
+  var s = size || 38;
+  return (
+    <div style={{ display: 'flex', gap: 4 }}>
+      {letters.map(function(letter, i) {
+        return (
+          <div key={i} style={{
+            width: s, height: s, borderRadius: Math.round(s * 0.24),
+            background: colors[i % colors.length],
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontFamily: 'var(--font-display)', fontWeight: 800,
+            fontSize: Math.round(s * 0.5), color: '#fff',
+            boxShadow: '0 3px 0 rgba(0,0,0,.15)',
+          }}>{letter}</div>
+        );
+      })}
+    </div>
+  );
+}
+
+function RunnerIcon({ size }) {
+  var s = size || 80;
+  return (
+    <svg width={s} height={s} viewBox="0 0 80 80" fill="none">
+      {/* Simple running figure */}
+      <circle cx="44" cy="18" r="8" fill="#F4B942" />
+      <path d="M36 30 L44 28 L52 30 L56 44 L48 42 L44 52 L50 66" stroke="#F4B942" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+      <path d="M44 52 L36 64" stroke="#F4B942" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+      <path d="M36 30 L24 40" stroke="#F4B942" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+      <path d="M52 30 L60 24" stroke="#F4B942" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+      {/* Motion lines */}
+      <line x1="16" y1="32" x2="10" y2="32" stroke="#F4B942" strokeWidth="2.5" strokeLinecap="round" opacity="0.5" />
+      <line x1="18" y1="40" x2="10" y2="40" stroke="#F4B942" strokeWidth="2.5" strokeLinecap="round" opacity="0.35" />
+      <line x1="17" y1="48" x2="12" y2="48" stroke="#F4B942" strokeWidth="2.5" strokeLinecap="round" opacity="0.25" />
+    </svg>
+  );
+}
+
+function GameCard({ title, subtitle, href, illustration, tileLogo, accentColor, accentBg, delay }) {
+  var [hovered, setHovered] = React.useState(false);
+  var [pressed, setPressed] = React.useState(false);
+
+  return (
+    <a
+      href={href}
+      onMouseEnter={function() { setHovered(true); }}
+      onMouseLeave={function() { setHovered(false); setPressed(false); }}
+      onMouseDown={function() { setPressed(true); }}
+      onMouseUp={function() { setPressed(false); }}
+      style={{
+        display: 'flex', flexDirection: 'column', alignItems: 'center',
+        textDecoration: 'none', color: 'inherit',
+        background: '#fff',
+        borderRadius: 24,
+        padding: '32px 24px 28px',
+        boxShadow: hovered
+          ? '0 16px 48px rgba(46,42,40,.16), 0 2px 8px rgba(46,42,40,.08)'
+          : '0 6px 24px rgba(46,42,40,.08), 0 1px 4px rgba(46,42,40,.04)',
+        border: '2px solid ' + (hovered ? accentColor : 'transparent'),
+        cursor: 'pointer',
+        transition: 'all 220ms cubic-bezier(.4,0,.2,1)',
+        transform: pressed ? 'scale(0.97)' : (hovered ? 'translateY(-4px)' : 'translateY(0)'),
+        position: 'relative',
+        overflow: 'hidden',
+        animation: 'welcome-float 3s ease-in-out ' + delay + 's infinite',
+      }}
+    >
+      {/* Accent glow behind illustration */}
+      <div style={{
+        position: 'absolute', top: -20, left: '50%', transform: 'translateX(-50%)',
+        width: 140, height: 140, borderRadius: '50%',
+        background: accentBg,
+        filter: 'blur(30px)',
+        opacity: hovered ? 0.7 : 0.35,
+        transition: 'opacity 300ms ease',
+        pointerEvents: 'none',
+      }}></div>
+
+      {/* Illustration area */}
+      <div style={{
+        position: 'relative', zIndex: 1,
+        marginBottom: 20,
+        animation: hovered ? 'welcome-wobble 0.6s ease-in-out' : 'none',
+      }}>
+        {illustration}
+      </div>
+
+      {/* Tile logo */}
+      <div style={{ position: 'relative', zIndex: 1, marginBottom: 14 }}>
+        {tileLogo}
+      </div>
+
+      {/* Subtitle */}
+      <div style={{
+        fontFamily: 'var(--font-body)', fontWeight: 600,
+        fontSize: 14, color: 'var(--text-muted)',
+        textAlign: 'center', position: 'relative', zIndex: 1,
+      }}>
+        {subtitle}
+      </div>
+
+      {/* Play arrow hint */}
+      <div style={{
+        marginTop: 16,
+        width: 40, height: 40, borderRadius: 12,
+        background: hovered ? accentColor : 'var(--bg-sunken)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        transition: 'all 200ms ease',
+        position: 'relative', zIndex: 1,
+      }}>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill={hovered ? '#fff' : 'var(--text-muted)'}>
+          <path d="M5 2.5L12.5 8L5 13.5V2.5Z" />
+        </svg>
+      </div>
+    </a>
+  );
+}
+
+function ComingSoonCard() {
+  return (
+    <div style={{
+      display: 'flex', flexDirection: 'column', alignItems: 'center',
+      justifyContent: 'center',
+      background: 'var(--bg-sunken)',
+      borderRadius: 24,
+      padding: '32px 24px 28px',
+      border: '2px dashed var(--hairline)',
+      minHeight: 260,
+    }}>
+      <div style={{
+        width: 48, height: 48, borderRadius: 14,
+        background: 'var(--hairline)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        marginBottom: 14,
+      }}>
+        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="var(--text-muted)" strokeWidth="2" strokeLinecap="round">
+          <line x1="11" y1="5" x2="11" y2="17" />
+          <line x1="5" y1="11" x2="17" y2="11" />
+        </svg>
+      </div>
+      <div style={{
+        fontFamily: 'var(--font-display)', fontWeight: 700,
+        fontSize: 16, color: 'var(--text-muted)',
+      }}>
+        More coming soon
+      </div>
+    </div>
+  );
+}
+
+function WelcomeApp() {
+  return (
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex', flexDirection: 'column', alignItems: 'center',
+      padding: '48px 24px 64px',
+      background: 'var(--bg-app)',
+    }}>
+      {/* YanGames brand mark */}
+      <div style={{
+        fontFamily: 'var(--font-display)', fontWeight: 700,
+        fontSize: 15, color: 'var(--text-muted)',
+        letterSpacing: '0.14em', textTransform: 'uppercase',
+        marginBottom: 8,
+      }}>
+        YanGames
+      </div>
+
+      {/* Tagline */}
+      <div style={{
+        fontFamily: 'var(--font-body)', fontWeight: 600,
+        fontSize: 28, color: 'var(--text-strong)',
+        textAlign: 'center', marginBottom: 48,
+        textWrap: 'balance', lineHeight: 1.3,
+      }}>
+        Pick a game, have some fun.
+      </div>
+
+      {/* Game grid */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 280px))',
+        gap: 24,
+        width: '100%',
+        maxWidth: 620,
+        justifyContent: 'center',
+      }}>
+        {/* Yandl card */}
+        <GameCard
+          title="Yandl"
+          subtitle="Guess the word in 6 tries"
+          href="Yandl/index.html"
+          accentColor="var(--coral)"
+          accentBg="var(--coral-soft)"
+          delay={0}
+          illustration={
+            <img
+              src="assets/illustrations/cat.png"
+              alt="Yandl mascot"
+              style={{
+                width: 100, height: 'auto',
+                filter: 'drop-shadow(0 6px 14px rgba(46,42,40,.18))',
+              }}
+            />
+          }
+          tileLogo={
+            <TileLogo
+              letters={['Y','A','N','D','L']}
+              colors={['#E8755C','#8FD3B6','#F4D58D','#C7B6E8','#A7D3E8']}
+              size={34}
+            />
+          }
+        />
+
+        {/* Rundl card */}
+        <GameCard
+          title="Rundl"
+          subtitle="Run, jump, don't stop"
+          href="Rundl/index.html"
+          accentColor="#F4B942"
+          accentBg="var(--butter-soft)"
+          delay={0.4}
+          illustration={
+            <img
+              src="assets/illustrations/unicorn.png"
+              alt="Rundl mascot"
+              style={{
+                width: 100, height: 'auto',
+                filter: 'drop-shadow(0 6px 14px rgba(46,42,40,.18))',
+              }}
+            />
+          }
+          tileLogo={
+            <TileLogo
+              letters={['R','U','N','D','L']}
+              colors={['#E8755C','#F4D58D','#8FD3B6','#C7B6E8','#F4B942']}
+              size={34}
+            />
+          }
+        />
+
+        {/* Coming soon placeholder */}
+        <ComingSoonCard />
+      </div>
+
+      {/* Footer */}
+      <div style={{
+        marginTop: 56,
+        fontFamily: 'var(--font-body)', fontWeight: 500,
+        fontSize: 12, color: 'var(--text-muted)',
+        textAlign: 'center',
+      }}>
+        A YanGames collection
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  React.createElement(WelcomeApp)
+);
+</script>
+</body>
+</html>

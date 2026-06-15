@@ -1,0 +1,86 @@
+/* ============================================================
+   YanGames — app shell (full-viewport mobile, framed on desktop)
+   Linked by Yandl/ and Rundl/ after styles.css.
+   The data-theme attribute lives on .app-root so every game
+   token (--game-bg, --game-text, tiles, keys) cascades down.
+   ============================================================ */
+
+html, body { height: 100%; margin: 0; padding: 0; }
+#root { height: 100%; }
+
+body {
+  background: var(--game-bg);
+  /* Stop iOS rubber-band scroll / pull-to-refresh inside the games */
+  overscroll-behavior: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* ---- Mobile-first: the app fills the whole viewport ---- */
+.app-root {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--game-bg);
+  box-sizing: border-box;
+  /* keep UI clear of the notch / home indicator */
+  padding:
+    env(safe-area-inset-top)
+    env(safe-area-inset-right)
+    env(safe-area-inset-bottom)
+    env(safe-area-inset-left);
+}
+
+.phone-shell {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--game-bg);
+  overflow: hidden;
+}
+
+/* Instant taps (no 300ms delay / double-tap zoom); panning/scroll still work */
+.app-root, .app-root * { touch-action: manipulation; }
+.app-root canvas { display: block; }
+
+/* ---- Desktop / large screens: float a centered phone ----
+   The games are portrait, so on a wide screen we present them
+   inside a tasteful device frame instead of stretching. */
+@media (min-width: 760px) {
+  body { background: var(--bg-app); }
+
+  .app-root {
+    position: static;
+    min-height: 100dvh;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-app);
+    padding: 24px 16px;
+  }
+
+  .phone-shell {
+    flex: none;
+    width: 390px;
+    height: 800px;
+    max-height: calc(100dvh - 48px);
+    border-radius: 44px;
+    /* dark device bezel via stacked rings (no extra DOM) */
+    box-shadow:
+      0 0 0 11px #1c1a19,
+      0 0 0 12px #0e0c0b,
+      0 32px 80px rgba(46, 42, 40, .30),
+      inset 0 0 0 2px #38342f;
+  }
+}
+
+/* Respect reduced-motion for decorative animation */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
