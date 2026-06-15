@@ -19,6 +19,7 @@ function BendRunnerScreen({ theme, charId, onBack, onBoard }) {
   var CHAR_EMOJI = { B: '🐕', E: '🐱', N: '👑', D: '🌭' };
   var charColor = CHAR_CLR[charId] || '#E8755C';
   var tbColor   = dark ? 'rgba(255,255,255,.82)' : 'var(--text-body)';
+  var snd       = function (n) { if (window.YanSound) window.YanSound.play(n, 'bend-sound'); };
 
   // ── Online leaderboard submission ─────────────────────────────────
   var LB   = window.YanLeaderboard;
@@ -51,13 +52,14 @@ function BendRunnerScreen({ theme, charId, onBack, onBoard }) {
     setFinalScore(0);
     setIsNewRecord(false);
     setSaved(false);
+    snd('start');
   }
 
   // ── Jump ─────────────────────────────────────────────────────────
   function doJump() {
     var s = stateRef.current;
     if (!s || phaseRef.current !== 'playing') return;
-    if (s.charY >= -2) { s.charVY = s.JUMP_VY; s.jumping = true; }
+    if (s.charY >= -2) { s.charVY = s.JUMP_VY; s.jumping = true; snd('jump'); }
   }
 
   // ── Keyboard input ────────────────────────────────────────────────
@@ -235,6 +237,7 @@ function BendRunnerScreen({ theme, charId, onBack, onBoard }) {
 
         // Score
         s.score += s.speed * 0.05;
+        if (Math.floor(s.score / 500) > (s.milestone || 0)) { s.milestone = Math.floor(s.score / 500); snd('milestone'); }
 
         // Clouds drift
         s.clouds.forEach(function (c) { c.x -= s.speed * 0.25; });
@@ -296,6 +299,7 @@ function BendRunnerScreen({ theme, charId, onBack, onBoard }) {
           setIsNewRecord(isRecord);
           phaseRef.current = 'dead';
           setPhase('dead');
+          snd('gameover');
         }
       }
 

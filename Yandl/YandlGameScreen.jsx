@@ -28,6 +28,7 @@ function GameScreen({ theme, onBack, onHelp, onStats }) {
   React.useEffect(function() {
     if ((status === 'won' || status === 'lost') && !recorded) {
       if (status === 'won' && !endRef.current) endRef.current = Date.now();
+      snd(status === 'won' ? 'win' : 'lose');
       Game.recordResult(status === 'won', guesses.length);
       setRecorded(true);
       Game.saveTodayResult({ guesses: guesses, recorded: true, startedAt: startRef.current, endedAt: endRef.current });
@@ -39,14 +40,18 @@ function GameScreen({ theme, onBack, onHelp, onStats }) {
     setTimeout(function() { setToast(''); }, 1400);
   };
 
+  var snd = function(n) { if (window.YanSound) window.YanSound.play(n, 'yandl-sound'); };
+
   var submit = React.useCallback(function() {
     if (current.length < 5) {
+      snd('invalid');
       setInvalidRow(guesses.length);
       showToast('Not enough letters');
       setTimeout(function() { setInvalidRow(-1); }, 500);
       return;
     }
     if (!Game.isValidWord(current)) {
+      snd('invalid');
       setInvalidRow(guesses.length);
       showToast('Not in word list');
       setTimeout(function() { setInvalidRow(-1); }, 500);
@@ -59,6 +64,7 @@ function GameScreen({ theme, onBack, onHelp, onStats }) {
     setLetterStates(function(p) { return Game.mergeLetters(p, letters, states); });
     setCurrent('');
     setReveal(true);
+    snd('flip');
     lockRef.current = true;
     setTimeout(function() { setReveal(false); lockRef.current = false; }, 1900);
     var newStatus = Game.determineStatus(newGuesses);
@@ -71,8 +77,8 @@ function GameScreen({ theme, onBack, onHelp, onStats }) {
   var onKey = React.useCallback(function(k) {
     if (lockRef.current || status !== 'playing') return;
     if (k === 'enter') submit();
-    else if (k === 'back') setCurrent(function(c) { return c.slice(0, -1); });
-    else if (/^[a-z]$/.test(k)) setCurrent(function(c) { return c.length < 5 ? c + k : c; });
+    else if (k === 'back') { snd('back'); setCurrent(function(c) { return c.slice(0, -1); }); }
+    else if (/^[a-z]$/.test(k)) { snd('key'); setCurrent(function(c) { return c.length < 5 ? c + k : c; }); }
   }, [submit, status]);
 
   React.useEffect(function() {

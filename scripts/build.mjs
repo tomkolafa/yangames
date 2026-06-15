@@ -32,7 +32,7 @@ await mkdir(DIST, { recursive: true });
 const STATIC = [
   'styles.css', 'app.css', 'pwa.js', 'sw.js', 'manifest.webmanifest',
   'icon.svg', 'icon-180.png', 'icon-192.png', 'icon-512.png',
-  '_ds_bundle.js', 'config.js', 'leaderboard.js', 'tokens', 'assets',
+  '_ds_bundle.js', 'config.js', 'leaderboard.js', 'sound.js', 'og.png', 'tokens', 'assets',
   'Yandl/words.js', 'Yandl/game.js', 'Rundl/game.js',
 ];
 for (const rel of STATIC) {
