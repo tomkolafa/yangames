@@ -119,10 +119,10 @@ await check('snakl', '/Snakl/index.html', async (page) => {
   await page.waitForTimeout(900);
 });
 
-await check('bacle', '/Bacle/index.html', async (page) => {
+await check('packl', '/Packl/index.html', async (page) => {
   // every level's maze (incl. per-level mazeMods) must be fully connected
   const mazeOk = await page.evaluate(() => {
-    const G = window.BacleGame;
+    const G = window.PacklGame;
     return G.LEVELS.every((lv) => G.validateMaze(G.parseMaze(G.MAZE_MAIN, lv.mazeMods)));
   });
   if (!mazeOk) throw new Error('a level maze is not fully connected (unreachable pellets)');

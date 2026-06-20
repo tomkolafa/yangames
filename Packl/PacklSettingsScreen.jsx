@@ -1,16 +1,16 @@
-// BACLE — Settings Screen (shared chrome + Bacle's D-pad toggle)
-function BacleSettingsScreen({ theme, setTheme }) {
+// PACKL — Settings Screen (shared chrome + Packl's D-pad toggle)
+function PacklSettingsScreen({ theme, setTheme }) {
   var dark = theme === 'clean-dark' || theme === 'funky';
 
-  var [sound, setSound] = React.useState(function() { return localStorage.getItem('bacle-sound') !== '0'; });
+  var [sound, setSound] = React.useState(function() { return localStorage.getItem('packl-sound') !== '0'; });
   // On (default): show the on-screen D-pad under the board. Off: swipe/keys only.
-  var [dpad, setDpad] = React.useState(function() { return localStorage.getItem('bacle-dpad') !== '0'; });
+  var [dpad, setDpad] = React.useState(function() { return localStorage.getItem('packl-dpad') !== '0'; });
 
   var mutedColor = dark ? 'rgba(255,255,255,.45)' : 'var(--text-muted)';
   var divColor   = dark ? 'rgba(255,255,255,.08)' : 'var(--hairline)';
 
-  var saveSound = function(v) { setSound(v); localStorage.setItem('bacle-sound', v ? '1' : '0'); };
-  var saveDpad  = function(v) { setDpad(v); localStorage.setItem('bacle-dpad', v ? '1' : '0'); };
+  var saveSound = function(v) { setSound(v); localStorage.setItem('packl-sound', v ? '1' : '0'); };
+  var saveDpad  = function(v) { setDpad(v); localStorage.setItem('packl-dpad', v ? '1' : '0'); };
 
   function Toggle(props) {
     return React.createElement('div', {
@@ -122,7 +122,7 @@ function BacleSettingsScreen({ theme, setTheme }) {
 
         {/* About */}
         <SectionLabel>About</SectionLabel>
-        <Row label="Bacle" desc="Chomp the maze, dodge the ghosts, clear 5 themed levels" control={
+        <Row label="Packl" desc="Chomp the maze, dodge the ghosts, clear 5 themed levels" control={
           React.createElement('span', { style: { fontSize: 12, color: mutedColor, fontWeight: 600 } }, 'v1.0')
         } />
         <Row label="Built in 🇨🇦" desc="Arlington Ave labs." control={
@@ -132,4 +132,4 @@ function BacleSettingsScreen({ theme, setTheme }) {
     </div>
   );
 }
-window.BacleSettingsScreen = BacleSettingsScreen;
+window.PacklSettingsScreen = PacklSettingsScreen;

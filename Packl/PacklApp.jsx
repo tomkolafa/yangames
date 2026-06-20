@@ -1,6 +1,6 @@
-// BACLE — App root: full-viewport mobile shell, nav, screen routing
+// PACKL — App root: full-viewport mobile shell, nav, screen routing
 
-function BacleBottomNav({ screen, onTab, theme }) {
+function PacklBottomNav({ screen, onTab, theme }) {
   var dark = theme === 'clean-dark' || theme === 'funky';
   var tabs = [
     { id: 'home',        label: 'Home',  icon: React.createElement('svg', {width:20,height:20,viewBox:'0 0 24 24',fill:'none',stroke:'currentColor',strokeWidth:2,strokeLinecap:'round',strokeLinejoin:'round'}, React.createElement('path', {d:'M3 12L12 3l9 9'}), React.createElement('path', {d:'M5 10v9a1 1 0 001 1h3v-5h6v5h3a1 1 0 001-1v-9'})) },
@@ -44,16 +44,16 @@ function BacleBottomNav({ screen, onTab, theme }) {
   );
 }
 
-function BacleApp() {
+function PacklApp() {
   var [screen,  setScreen]  = React.useState('home');
-  var [theme,   setTheme]   = React.useState(function () { return localStorage.getItem('bacle-theme') || 'clean-light'; });
-  var [charId,  setCharId]  = React.useState(function () { return localStorage.getItem('bacle-char')  || 'B'; });
+  var [theme,   setTheme]   = React.useState(function () { return localStorage.getItem('packl-theme') || 'clean-light'; });
+  var [charId,  setCharId]  = React.useState(function () { return localStorage.getItem('packl-char')  || 'B'; });
   var [gameKey, setGameKey] = React.useState(0);
   var ID = window.YanIdentity;
   var [showNamePrompt, setShowNamePrompt] = React.useState(function () { return !!ID && !ID.getName() && !ID.isOnboarded(); });
 
-  var saveTheme = function (t) { setTheme(t); localStorage.setItem('bacle-theme', t); };
-  var saveChar  = function (c) { setCharId(c); localStorage.setItem('bacle-char', c); };
+  var saveTheme = function (t) { setTheme(t); localStorage.setItem('packl-theme', t); };
+  var saveChar  = function (c) { setCharId(c); localStorage.setItem('packl-char', c); };
 
   var startGame = function () {
     setScreen('game');
@@ -70,22 +70,22 @@ function BacleApp() {
   return (
     <div className="app-root" data-theme={theme}>
       <div className="phone-shell">
-        {screen === 'home' && React.createElement(window.BacleHomeScreen, {
+        {screen === 'home' && React.createElement(window.PacklHomeScreen, {
           theme, charId, setCharId: saveChar, onPlay: startGame,
         })}
-        {screen === 'game' && React.createElement(window.BacleGameScreen, {
+        {screen === 'game' && React.createElement(window.PacklGameScreen, {
           key: gameKey,
           theme, charId,
           onBack:  function () { setScreen('home'); },
           onBoard: function () { setScreen('leaderboard'); },
         })}
-        {screen === 'leaderboard' && React.createElement(window.BacleLeaderboardScreen, {
+        {screen === 'leaderboard' && React.createElement(window.PacklLeaderboardScreen, {
           theme, charId,
         })}
-        {screen === 'settings' && React.createElement(window.BacleSettingsScreen, {
+        {screen === 'settings' && React.createElement(window.PacklSettingsScreen, {
           theme, setTheme: saveTheme,
         })}
-        {showNav && React.createElement(BacleBottomNav, { screen, onTab: handleTab, theme })}
+        {showNav && React.createElement(PacklBottomNav, { screen, onTab: handleTab, theme })}
         {showNamePrompt && ID && React.createElement(ID.NamePrompt, {
           theme, dismissible: true,
           onSave: function () { setShowNamePrompt(false); },
@@ -95,4 +95,4 @@ function BacleApp() {
     </div>
   );
 }
-window.BacleApp = BacleApp;
+window.PacklApp = PacklApp;

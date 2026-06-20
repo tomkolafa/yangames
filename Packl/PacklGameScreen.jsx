@@ -1,7 +1,7 @@
-// BACLE — Game Screen (canvas Pac-Man with the four pets, 5 themed levels)
+// PACKL — Game Screen (canvas Pac-Man with the four pets, 5 themed levels)
 
 // A small chevron glyph for the on-screen D-pad (inherits the button's colour).
-function bacleChevron(d) {
+function packlChevron(d) {
   return React.createElement('svg', {
     width: 26, height: 26, viewBox: '0 0 24 24', fill: 'none',
     stroke: 'currentColor', strokeWidth: 2.6, strokeLinecap: 'round', strokeLinejoin: 'round',
@@ -9,7 +9,7 @@ function bacleChevron(d) {
 }
 
 // One D-pad direction button (DOM — crisp, themable, accessible) with a pressed state.
-function BacleDirButton({ glyph, label, accent, dark, onPress }) {
+function PacklDirButton({ glyph, label, accent, dark, onPress }) {
   var [down, setDown] = React.useState(false);
   function press(e) { e.preventDefault(); setDown(true); onPress(); }
   function release() { setDown(false); }
@@ -32,14 +32,14 @@ function BacleDirButton({ glyph, label, accent, dark, onPress }) {
   }, glyph);
 }
 
-function BacleGameScreen({ theme, charId, onBack, onBoard }) {
+function PacklGameScreen({ theme, charId, onBack, onBoard }) {
   var canvasRef = React.useRef(null);
   var stateRef  = React.useRef(null);
   var rafRef    = React.useRef(null);
   var phaseRef  = React.useRef('idle');
   var timerRef  = React.useRef(0);      // ms remaining for a timed interstitial
   var initFnRef = React.useRef(null);
-  var Game      = window.BacleGame;
+  var Game      = window.PacklGame;
   var hiRef     = React.useRef(Game.loadHighScores()[charId] || 0);
 
   var [phase,       setPhase]       = React.useState('idle');
@@ -47,14 +47,14 @@ function BacleGameScreen({ theme, charId, onBack, onBoard }) {
   var [hiScore,     setHiScore]     = React.useState(hiRef.current);
   var [isNewRecord, setIsNewRecord] = React.useState(false);
   var [won,         setWon]         = React.useState(false);
-  var showDpad = (typeof localStorage !== 'undefined') && localStorage.getItem('bacle-dpad') !== '0';
+  var showDpad = (typeof localStorage !== 'undefined') && localStorage.getItem('packl-dpad') !== '0';
 
   var dark       = theme === 'clean-dark' || theme === 'funky';
   var CHAR_CLR   = { B: '#F4B942', E: '#E8755C', N: '#4A4A4A', D: '#9B6B3A' };
   var CHAR_EMOJI = { B: '🐕', E: '🐱', N: '👑', D: '🌭' };
   var charColor  = CHAR_CLR[charId] || '#E8755C';
   var tbColor    = dark ? 'rgba(255,255,255,.82)' : 'var(--text-body)';
-  var snd        = function (n) { if (window.YanSound) window.YanSound.play(n, 'bacle-sound'); };
+  var snd        = function (n) { if (window.YanSound) window.YanSound.play(n, 'packl-sound'); };
 
   // ── Online leaderboard submission ─────────────────────────────────
   var LB   = window.YanLeaderboard;
@@ -65,7 +65,7 @@ function BacleGameScreen({ theme, charId, onBack, onBoard }) {
 
   function submitWith(nm) {
     if (!lbOn || !nm) return;
-    LB.submit({ game: 'bacle', name: nm, emoji: CHAR_EMOJI[charId], score: finalScore, char_id: charId });
+    LB.submit({ game: 'packl', name: nm, emoji: CHAR_EMOJI[charId], score: finalScore, char_id: charId });
     setSaved(true);
   }
 
@@ -379,7 +379,7 @@ function BacleGameScreen({ theme, charId, onBack, onBoard }) {
         <div style={{
           fontFamily: 'var(--font-display)', fontWeight: 800, fontSize: 22,
           letterSpacing: '0.08em', color: charColor,
-        }}>BACLE</div>
+        }}>PACKL</div>
 
         <button onClick={onBoard} style={{
           border: 'none', background: 'transparent', cursor: 'pointer',
@@ -418,7 +418,7 @@ function BacleGameScreen({ theme, charId, onBack, onBoard }) {
               {isNewRecord && (
                 <div style={{
                   marginTop: 6, fontSize: 14, fontWeight: 700, color: '#F4D58D',
-                  animation: 'bacle-bounce 0.9s ease-in-out infinite',
+                  animation: 'packl-bounce 0.9s ease-in-out infinite',
                 }}>🏅 New Record!</div>
               )}
 
@@ -473,7 +473,7 @@ function BacleGameScreen({ theme, charId, onBack, onBoard }) {
                 }}>Scores</button>
             </div>
 
-            <div style={{ fontSize: 11, fontWeight: 500, color: dark ? 'rgba(255,255,255,.3)' : 'var(--text-muted)', animation: 'bacle-pulse 2s ease infinite' }}>
+            <div style={{ fontSize: 11, fontWeight: 500, color: dark ? 'rgba(255,255,255,.3)' : 'var(--text-muted)', animation: 'packl-pulse 2s ease infinite' }}>
               Tap or press SPACE to play again
             </div>
           </div>
@@ -493,13 +493,13 @@ function BacleGameScreen({ theme, charId, onBack, onBoard }) {
         padding: '4px 16px',
         paddingBottom: 'max(8px, env(safe-area-inset-bottom))',
       }}>
-        <BacleDirButton label="Up"    glyph={bacleChevron('M6 15l6-6 6 6')} accent={charColor} dark={dark} onPress={function () { inputDir(0, -1); }} />
-        <BacleDirButton label="Left"  glyph={bacleChevron('M15 6l-6 6 6 6')} accent={charColor} dark={dark} onPress={function () { inputDir(-1, 0); }} />
-        <BacleDirButton label="Down"  glyph={bacleChevron('M6 9l6 6 6-6')}  accent={charColor} dark={dark} onPress={function () { inputDir(0, 1); }} />
-        <BacleDirButton label="Right" glyph={bacleChevron('M9 6l6 6-6 6')}  accent={charColor} dark={dark} onPress={function () { inputDir(1, 0); }} />
+        <PacklDirButton label="Up"    glyph={packlChevron('M6 15l6-6 6 6')} accent={charColor} dark={dark} onPress={function () { inputDir(0, -1); }} />
+        <PacklDirButton label="Left"  glyph={packlChevron('M15 6l-6 6 6 6')} accent={charColor} dark={dark} onPress={function () { inputDir(-1, 0); }} />
+        <PacklDirButton label="Down"  glyph={packlChevron('M6 9l6 6 6-6')}  accent={charColor} dark={dark} onPress={function () { inputDir(0, 1); }} />
+        <PacklDirButton label="Right" glyph={packlChevron('M9 6l6 6-6 6')}  accent={charColor} dark={dark} onPress={function () { inputDir(1, 0); }} />
       </div>
       )}
     </div>
   );
 }
-window.BacleGameScreen = BacleGameScreen;
+window.PacklGameScreen = PacklGameScreen;

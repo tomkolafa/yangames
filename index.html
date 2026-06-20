@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>YanGames — Yandl, Rundl, Snakl &amp; Bacle</title>
+<title>YanGames — Yandl, Rundl, Snakl &amp; Packl</title>
 <meta name="theme-color" content="#FBF7F0" />
 <meta name="description" content="YanGames — a tiny collection of daily games. Play Yandl, Rundl and Snakl." />
 <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -121,7 +121,7 @@ function SnakeIcon({ size }) {
   );
 }
 
-function BacleIcon({ size }) {
+function PacklIcon({ size }) {
   var s = size || 80;
   return (
     <svg width={s} height={s} viewBox="0 0 80 80" fill="none">
@@ -361,22 +361,22 @@ function WelcomeApp() {
           }
         />
 
-        {/* Bacle card */}
+        {/* Packl card */}
         <GameCard
-          title="Bacle"
+          title="Packl"
           subtitle="Chomp the maze, dodge ghosts"
-          href="Bacle/index.html"
+          href="Packl/index.html"
           accentColor="#F4B942"
           accentBg="rgba(244,185,66,.32)"
           delay={1.2}
           illustration={
             <div style={{ filter: 'drop-shadow(0 6px 14px rgba(46,42,40,.18))' }}>
-              <BacleIcon size={92} />
+              <PacklIcon size={92} />
             </div>
           }
           tileLogo={
             <TileLogo
-              letters={['B','A','C','L','E']}
+              letters={['P','A','C','K','L']}
               colors={['#F4B942','#E8755C','#F3A9C8','#79D0E0','#C7B6E8']}
               size={34}
             />

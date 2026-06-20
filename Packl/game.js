@@ -1,9 +1,9 @@
-// BACLE — Game engine: a Pac-Man-style maze chomper using the four shared pets.
-// Exposed as window.BacleGame. All drawing is procedural (no image files).
+// PACKL — Game engine: a Pac-Man-style maze chomper using the four shared pets.
+// Exposed as window.PacklGame. All drawing is procedural (no image files).
 // Pure logic (maze/actors/ghost-AI/levels) is separated from the canvas drawing,
 // mirroring Snakl's game.js shape. The pet art is duplicated from Snakl per the
 // CLAUDE.md "new game" contract so each game's bundle stays standalone.
-window.BacleGame = (function () {
+window.PacklGame = (function () {
 
   // ── CHARACTERS (the four Rundl/Snakl pets) ─────────────────────────
   var CHARACTERS = [
@@ -507,7 +507,7 @@ window.BacleGame = (function () {
       }
     }
     if (reachablePellets !== maze.pelletCount) {
-      console.warn('BacleGame: ' + (maze.pelletCount - reachablePellets) +
+      console.warn('PacklGame: ' + (maze.pelletCount - reachablePellets) +
         ' of ' + maze.pelletCount + ' pellets are unreachable — maze is not fully connected.');
     }
     return reachablePellets === maze.pelletCount;
@@ -1161,26 +1161,26 @@ window.BacleGame = (function () {
     ctx.restore();
   }
 
-  // ── SCORES & STATS (per character, bacle- keys; mirrors Snakl) ──────
+  // ── SCORES & STATS (per character, packl- keys; mirrors Snakl) ──────
   function loadHighScores() {
-    try { return JSON.parse(localStorage.getItem('bacle-hi') || '{}'); } catch (_) { return {}; }
+    try { return JSON.parse(localStorage.getItem('packl-hi') || '{}'); } catch (_) { return {}; }
   }
   function saveHighScore(id, score) {
     var hs = loadHighScores();
-    if (!hs[id] || score > hs[id]) { hs[id] = Math.floor(score); localStorage.setItem('bacle-hi', JSON.stringify(hs)); }
+    if (!hs[id] || score > hs[id]) { hs[id] = Math.floor(score); localStorage.setItem('packl-hi', JSON.stringify(hs)); }
   }
   function getGlobalHi() {
     var v = Object.values(loadHighScores()); return v.length ? Math.max.apply(null, v) : 0;
   }
   function loadStats() {
-    try { return JSON.parse(localStorage.getItem('bacle-stats') || '{}'); } catch (_) { return { games: 0 }; }
+    try { return JSON.parse(localStorage.getItem('packl-stats') || '{}'); } catch (_) { return { games: 0 }; }
   }
   function recordGame(extra) {
     var s = loadStats();
     s.games = (s.games || 0) + 1;
     if (extra && extra.cleared) s.cleared = (s.cleared || 0) + extra.cleared;
     if (extra && extra.won) s.wins = (s.wins || 0) + 1;
-    localStorage.setItem('bacle-stats', JSON.stringify(s));
+    localStorage.setItem('packl-stats', JSON.stringify(s));
   }
 
   return {

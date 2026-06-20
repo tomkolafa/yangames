@@ -1,7 +1,7 @@
-// BACLE — Home Screen with animated pet (chomper) selector
+// PACKL — Home Screen with animated pet (chomper) selector
 
 // Mini canvas preview — draws a pet (side view) running in a card
-function BaclePreviewCanvas({ charId, size }) {
+function PacklPreviewCanvas({ charId, size }) {
   var canvasRef = React.useRef(null);
   var rafRef    = React.useRef(null);
   var frameRef  = React.useRef(0);
@@ -15,7 +15,7 @@ function BaclePreviewCanvas({ charId, size }) {
       ctx.clearRect(0, 0, size, size);
       ctx.save();
       ctx.translate(Math.round(size * 0.43), size - 8);
-      try { window.BacleGame.drawCharacter(ctx, charId, f, false); } catch (e) { console.error(e); }
+      try { window.PacklGame.drawCharacter(ctx, charId, f, false); } catch (e) { console.error(e); }
       ctx.restore();
     }
 
@@ -39,10 +39,10 @@ function BaclePreviewCanvas({ charId, size }) {
   );
 }
 
-function BacleHomeScreen({ theme, charId, setCharId, onPlay }) {
+function PacklHomeScreen({ theme, charId, setCharId, onPlay }) {
   var DS      = window.WordlingDesignSystem_ea77b4;
   var Button  = DS.Button;
-  var Game    = window.BacleGame;
+  var Game    = window.PacklGame;
   var dark    = theme === 'clean-dark' || theme === 'funky';
 
   var hs       = Game.loadHighScores();
@@ -53,7 +53,7 @@ function BacleHomeScreen({ theme, charId, setCharId, onPlay }) {
   var divColor   = dark ? 'rgba(255,255,255,.1)'  : 'var(--hairline)';
 
   var LOGO_COLORS  = ['#F4B942', '#E8755C', '#F3A9C8', '#79D0E0', '#C7B6E8'];
-  var LOGO_LETTERS = ['B', 'A', 'C', 'L', 'E'];
+  var LOGO_LETTERS = ['P', 'A', 'C', 'K', 'L'];
 
   var CHAR_COLOR  = { B: '#F4B942', E: '#E8755C', N: '#4A4A4A', D: '#9B6B3A' };
   var CHAR_BG     = { B: 'rgba(244,185,66,.13)', E: 'rgba(232,117,92,.13)', N: 'rgba(74,74,74,.13)', D: 'rgba(155,107,58,.13)' };
@@ -91,7 +91,7 @@ function BacleHomeScreen({ theme, charId, setCharId, onPlay }) {
         padding: '48px 16px 20px', gap: 16,
       }}>
 
-      {/* BACLE logo tiles */}
+      {/* PACKL logo tiles */}
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
         <div style={{ display: 'flex', gap: 5 }}>
           {LOGO_LETTERS.map(function (letter, i) {
@@ -131,7 +131,7 @@ function BacleHomeScreen({ theme, charId, setCharId, onPlay }) {
                 transition: 'all 150ms ease',
                 WebkitTapHighlightColor: 'transparent',
               }}>
-                <BaclePreviewCanvas charId={char.id} size={86} />
+                <PacklPreviewCanvas charId={char.id} size={86} />
                 <div style={{
                   fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 14,
                   color: active ? cc : 'var(--game-text)', lineHeight: 1,
@@ -150,7 +150,7 @@ function BacleHomeScreen({ theme, charId, setCharId, onPlay }) {
       {/* Play button */}
       <div style={{ width: '100%' }}>
         <Button variant="primary" size="lg" fullWidth onClick={onPlay}>
-          {"Let's Bacle!"}
+          {"Let's Packl!"}
         </Button>
       </div>
 
@@ -185,4 +185,4 @@ function BacleHomeScreen({ theme, charId, setCharId, onPlay }) {
     </div>
   );
 }
-window.BacleHomeScreen = BacleHomeScreen;
+window.PacklHomeScreen = PacklHomeScreen;

@@ -1,7 +1,7 @@
-// BACLE — Leaderboard Screen
+// PACKL — Leaderboard Screen
 
-// Front-facing pet portrait (reuses BacleGame.drawFace — same art as the chomper)
-function BacleFacePortrait({ charId, size }) {
+// Front-facing pet portrait (reuses PacklGame.drawFace — same art as the chomper)
+function PacklFacePortrait({ charId, size }) {
   var canvasRef = React.useRef(null);
   var s = size || 40;
 
@@ -15,7 +15,7 @@ function BacleFacePortrait({ charId, size }) {
     ctx.clearRect(0, 0, s, s);
     ctx.save();
     ctx.translate(s / 2, s / 2);
-    try { window.BacleGame.drawFace(ctx, charId, s); } catch (e) { console.error(e); }
+    try { window.PacklGame.drawFace(ctx, charId, s); } catch (e) { console.error(e); }
     ctx.restore();
   }, [charId, s]);
 
@@ -27,8 +27,8 @@ function BacleFacePortrait({ charId, size }) {
   );
 }
 
-function BacleLeaderboardScreen({ theme, charId }) {
-  var Game  = window.BacleGame;
+function PacklLeaderboardScreen({ theme, charId }) {
+  var Game  = window.PacklGame;
   var dark  = theme === 'clean-dark' || theme === 'funky';
   var hs    = Game.loadHighScores();
   var stats = Game.loadStats();
@@ -47,7 +47,7 @@ function BacleLeaderboardScreen({ theme, charId }) {
   var [online, setOnline] = React.useState(null);   // null = still loading
   React.useEffect(function () {
     if (window.YanLeaderboard && window.YanLeaderboard.ENABLED) {
-      window.YanLeaderboard.fetchTop('bacle', { limit: 25 }).then(function (rows) {
+      window.YanLeaderboard.fetchTop('packl', { limit: 25 }).then(function (rows) {
         setOnline(rows || []);
       });
     } else {
@@ -119,7 +119,7 @@ function BacleLeaderboardScreen({ theme, charId }) {
                   borderRadius: 12, padding: '12px 10px', textAlign: 'center',
                 }}>
                   <div style={{ marginBottom: 4 }}>
-                    <BacleFacePortrait charId={char.id} size={44} />
+                    <PacklFacePortrait charId={char.id} size={44} />
                   </div>
                   <div style={{ fontSize: 9, fontWeight: 700, color: cc, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
                     {char.name}
@@ -191,7 +191,7 @@ function BacleLeaderboardScreen({ theme, charId }) {
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       overflow: 'hidden', flexShrink: 0,
                     }}>
-                      <BacleFacePortrait charId={entry.char} size={36} />
+                      <PacklFacePortrait charId={entry.char} size={36} />
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{
@@ -255,4 +255,4 @@ function BacleLeaderboardScreen({ theme, charId }) {
     </div>
   );
 }
-window.BacleLeaderboardScreen = BacleLeaderboardScreen;
+window.PacklLeaderboardScreen = PacklLeaderboardScreen;

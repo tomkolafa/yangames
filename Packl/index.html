@@ -3,26 +3,26 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
-<title>Bacle — Pac-Man</title>
+<title>Packl — Pac-Man</title>
 <meta name="theme-color" content="#FBF7F0" />
-<meta name="description" content="Bacle — chomp the maze with your favourite pet. Eat the pellets, dodge the ghosts, clear five themed levels." />
+<meta name="description" content="Packl — chomp the maze with your favourite pet. Eat the pellets, dodge the ghosts, clear five themed levels." />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-<meta name="apple-mobile-web-app-title" content="Bacle" />
+<meta name="apple-mobile-web-app-title" content="Packl" />
 <link rel="manifest" href="/manifest.webmanifest" />
 <link rel="icon" href="/icon.svg" type="image/svg+xml" />
 <link rel="apple-touch-icon" href="/icon-180.png" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="YanGames" />
-<meta property="og:url" content="https://yandlgames.vercel.app/Bacle/index.html" />
-<meta property="og:title" content="Bacle — Pac-Man" />
+<meta property="og:url" content="https://yandlgames.vercel.app/Packl/index.html" />
+<meta property="og:title" content="Packl — Pac-Man" />
 <meta property="og:description" content="Chomp the maze with your favourite pet. Dodge the ghosts, clear five themed levels." />
 <meta property="og:image" content="https://yandlgames.vercel.app/og.png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Bacle — Pac-Man" />
+<meta name="twitter:title" content="Packl — Pac-Man" />
 <meta name="twitter:description" content="Chomp the maze, dodge the ghosts." />
 <meta name="twitter:image" content="https://yandlgames.vercel.app/og.png" />
 <script src="/pwa.js" defer></script>
@@ -38,15 +38,15 @@
   ::-webkit-scrollbar { width: 0; height: 0; }
   * { scrollbar-width: none; -ms-overflow-style: none; }
 
-  @keyframes bacle-bounce {
+  @keyframes packl-bounce {
     0%, 100% { transform: translateY(0) scale(1); }
     45%       { transform: translateY(-9px) scale(1.05); }
   }
-  @keyframes bacle-pulse {
+  @keyframes packl-pulse {
     0%, 100% { opacity: 1; }
     50%       { opacity: 0.45; }
   }
-  @keyframes bacle-spin {
+  @keyframes packl-spin {
     from { transform: rotate(0deg); }
     to   { transform: rotate(360deg); }
   }
@@ -65,15 +65,15 @@
 <body>
 <div id="root"></div>
 
-<script type="text/babel" src="BacleHomeScreen.jsx"></script>
-<script type="text/babel" src="BacleGameScreen.jsx"></script>
-<script type="text/babel" src="BacleLeaderboardScreen.jsx"></script>
-<script type="text/babel" src="BacleSettingsScreen.jsx"></script>
-<script type="text/babel" src="BacleApp.jsx"></script>
+<script type="text/babel" src="PacklHomeScreen.jsx"></script>
+<script type="text/babel" src="PacklGameScreen.jsx"></script>
+<script type="text/babel" src="PacklLeaderboardScreen.jsx"></script>
+<script type="text/babel" src="PacklSettingsScreen.jsx"></script>
+<script type="text/babel" src="PacklApp.jsx"></script>
 
 <script type="text/babel">
   ReactDOM.createRoot(document.getElementById('root')).render(
-    React.createElement(window.BacleApp)
+    React.createElement(window.PacklApp)
   );
 </script>
 </body>
