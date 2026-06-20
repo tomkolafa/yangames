@@ -1,5 +1,37 @@
 // SNAKL — Game Screen (canvas-based grid snake with the four pets)
 
+// A small chevron glyph for the on-screen D-pad (inherits the button's colour).
+function snaklChevron(d) {
+  return React.createElement('svg', {
+    width: 26, height: 26, viewBox: '0 0 24 24', fill: 'none',
+    stroke: 'currentColor', strokeWidth: 2.6, strokeLinecap: 'round', strokeLinejoin: 'round',
+  }, React.createElement('path', { d: d }));
+}
+
+// One D-pad direction button (DOM — crisp, themable, accessible) with a pressed state.
+function SnaklDirButton({ glyph, label, accent, dark, onPress }) {
+  var [down, setDown] = React.useState(false);
+  function press(e) { e.preventDefault(); setDown(true); onPress(); }
+  function release() { setDown(false); }
+  return React.createElement('button', {
+    'aria-label': label,
+    onPointerDown: press, onPointerUp: release, onPointerLeave: release, onPointerCancel: release,
+    onContextMenu: function (e) { e.preventDefault(); },
+    style: {
+      gridArea: label.toLowerCase(),
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      height: 60, borderRadius: 16, cursor: 'pointer',
+      border: '1px solid ' + (dark ? 'rgba(255,255,255,.10)' : 'var(--hairline)'),
+      background: down ? accent : (dark ? 'rgba(255,255,255,.07)' : 'rgba(0,0,0,.045)'),
+      color: down ? '#fff' : accent,
+      boxShadow: down ? 'none' : '0 2px 0 rgba(0,0,0,.10)',
+      transform: down ? 'scale(.93)' : 'scale(1)',
+      transition: 'transform 80ms ease, background 80ms ease, color 80ms ease',
+      WebkitTapHighlightColor: 'transparent', touchAction: 'none',
+    },
+  }, glyph);
+}
+
 function SnaklGameScreen({ theme, charId, onBack, onBoard }) {
   var canvasRef = React.useRef(null);
   var stateRef  = React.useRef(null);
@@ -140,18 +172,22 @@ function SnaklGameScreen({ theme, charId, onBack, onBoard }) {
     container.addEventListener('touchend',   onTouchEnd,   { passive: false });
 
     // ── Theme palette ────────────────────────────────────────────
-    var pageBg, boardBg, checker, scoreCol, mutedScore, hintCol;
+    var pageBg, boardTop, boardBot, gridDot, boardEdge, boardShadow, scoreCol, mutedScore, hintCol;
     if (theme === 'clean-dark') {
-      pageBg = '#1A1918'; boardBg = '#262422'; checker = 'rgba(255,255,255,.04)';
+      pageBg = '#1A1918'; boardTop = '#2B2926'; boardBot = '#201E1C';
+      gridDot = 'rgba(255,255,255,.06)'; boardEdge = 'rgba(255,255,255,.05)'; boardShadow = 'rgba(0,0,0,.45)';
       scoreCol = 'rgba(255,255,255,.85)'; mutedScore = 'rgba(255,255,255,.4)'; hintCol = 'rgba(255,255,255,.5)';
     } else if (theme === 'funky') {
-      pageBg = '#2C3A4B'; boardBg = '#243140'; checker = 'rgba(255,255,255,.05)';
+      pageBg = '#2C3A4B'; boardTop = '#283648'; boardBot = '#1F2A37';
+      gridDot = 'rgba(255,255,255,.07)'; boardEdge = 'rgba(255,255,255,.06)'; boardShadow = 'rgba(0,0,0,.40)';
       scoreCol = 'rgba(255,255,255,.9)'; mutedScore = 'rgba(255,255,255,.45)'; hintCol = 'rgba(255,255,255,.55)';
     } else if (theme === 'classic') {
-      pageBg = '#FFFFFF'; boardBg = '#F0F0F0'; checker = 'rgba(0,0,0,.045)';
+      pageBg = '#FFFFFF'; boardTop = '#F7F7F7'; boardBot = '#E9E9E9';
+      gridDot = 'rgba(0,0,0,.06)'; boardEdge = 'rgba(0,0,0,.05)'; boardShadow = 'rgba(0,0,0,.10)';
       scoreCol = '#3A3A3C'; mutedScore = '#9A9A9A'; hintCol = 'rgba(0,0,0,.42)';
     } else {
-      pageBg = '#FBF7F0'; boardBg = '#F0EAE0'; checker = 'rgba(70,60,50,.05)';
+      pageBg = '#FBF7F0'; boardTop = '#F6F1E9'; boardBot = '#E8E1D5';
+      gridDot = 'rgba(70,60,50,.08)'; boardEdge = 'rgba(70,60,50,.07)'; boardShadow = 'rgba(60,50,40,.16)';
       scoreCol = '#5A5048'; mutedScore = '#A89E92'; hintCol = 'rgba(46,42,40,.42)';
     }
 
@@ -162,14 +198,33 @@ function SnaklGameScreen({ theme, charId, onBack, onBoard }) {
 
       ctx.fillStyle = pageBg; ctx.fillRect(0, 0, GW, GH);
 
-      // Board panel + faint checkerboard
-      ctx.fillStyle = boardBg; ctx.fillRect(ox, oy, bp, bp);
-      ctx.fillStyle = checker;
+      // Board panel — rounded, soft vertical gradient, with a drop shadow
+      var br = Math.round(cell * 0.85);
+      ctx.save();
+      ctx.shadowColor = boardShadow; ctx.shadowBlur = 18; ctx.shadowOffsetY = 6;
+      var grad = ctx.createLinearGradient(0, oy, 0, oy + bp);
+      grad.addColorStop(0, boardTop); grad.addColorStop(1, boardBot);
+      ctx.fillStyle = grad;
+      rr(ctx, ox, oy, bp, bp, br); ctx.fill();
+      ctx.restore();
+
+      // Crisp inner edge
+      ctx.lineWidth = 1; ctx.strokeStyle = boardEdge;
+      rr(ctx, ox + 0.5, oy + 0.5, bp - 1, bp - 1, br); ctx.stroke();
+
+      // Faint dot grid — one dot per cell centre, clipped to the rounded panel
+      ctx.save();
+      rr(ctx, ox, oy, bp, bp, br); ctx.clip();
+      ctx.fillStyle = gridDot;
+      var dr = Math.max(1, cell * 0.07);
       for (var gy = 0; gy < ROWS; gy++) {
         for (var gx = 0; gx < COLS; gx++) {
-          if ((gx + gy) % 2 === 0) ctx.fillRect(ox + gx * cell, oy + gy * cell, cell, cell);
+          ctx.beginPath();
+          ctx.arc(ox + (gx + 0.5) * cell, oy + (gy + 0.5) * cell, dr, 0, Math.PI * 2);
+          ctx.fill();
         }
       }
+      ctx.restore();
 
       // Food (rotated for variety)
       if (s.food) {
@@ -215,8 +270,8 @@ function SnaklGameScreen({ theme, charId, onBack, onBoard }) {
         ctx.fillStyle = hintCol;
         ctx.font = '700 14px Nunito, sans-serif';
         ctx.textBaseline = 'middle';
-        ctx.fillText('Swipe or press an arrow', GW / 2, oy + bp / 2 - 9);
-        ctx.fillText('to start', GW / 2, oy + bp / 2 + 11);
+        ctx.fillText('Swipe, tap a button, or', GW / 2, oy + bp / 2 - 9);
+        ctx.fillText('press an arrow to start', GW / 2, oy + bp / 2 + 11);
       }
     }
 
@@ -395,6 +450,24 @@ function SnaklGameScreen({ theme, charId, onBack, onBoard }) {
             </div>
           </div>
         )}
+      </div>
+
+      {/* On-screen D-pad — precise touch control under the board */}
+      <div style={{
+        flexShrink: 0,
+        display: 'grid',
+        gridTemplateAreas: '". up ." "left down right"',
+        gridTemplateColumns: 'repeat(3, 1fr)',
+        gridTemplateRows: 'auto auto',
+        gap: 8,
+        width: '100%', maxWidth: 280, margin: '0 auto', boxSizing: 'border-box',
+        padding: '6px 16px',
+        paddingBottom: 'max(10px, env(safe-area-inset-bottom))',
+      }}>
+        <SnaklDirButton label="Up"    glyph={snaklChevron('M6 15l6-6 6 6')} accent={charColor} dark={dark} onPress={function () { inputDir(0, -1); }} />
+        <SnaklDirButton label="Left"  glyph={snaklChevron('M15 6l-6 6 6 6')} accent={charColor} dark={dark} onPress={function () { inputDir(-1, 0); }} />
+        <SnaklDirButton label="Down"  glyph={snaklChevron('M6 9l6 6 6-6')}  accent={charColor} dark={dark} onPress={function () { inputDir(0, 1); }} />
+        <SnaklDirButton label="Right" glyph={snaklChevron('M9 6l6 6-6 6')}  accent={charColor} dark={dark} onPress={function () { inputDir(1, 0); }} />
       </div>
     </div>
   );
