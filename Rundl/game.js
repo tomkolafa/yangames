@@ -505,20 +505,8 @@ window.BendGame = (function () {
     localStorage.setItem('bend-stats', JSON.stringify(s));
   }
 
-  // ── LEADERBOARD ──────────────────────────────────────────────────────
-  var LEADERBOARD = [
-    { name: 'Luna',   emoji: '🐱', char: 'E', score: 2840 },
-    { name: 'Max',    emoji: '🦴', char: 'B', score: 2210 },
-    { name: 'Cleo',   emoji: '👑', char: 'N', score: 1980 },
-    { name: 'Zara',   emoji: '🌭', char: 'D', score: 1750 },
-    { name: 'Pip',    emoji: '🐾', char: 'B', score: 1320 },
-    { name: 'Mochi',  emoji: '🎀', char: 'N', score: 1100 },
-    { name: 'Oscar',  emoji: '🐶', char: 'D', score:  890 },
-    { name: 'Bella',  emoji: '🌸', char: 'E', score:  740 },
-  ];
-
   return {
-    CHARACTERS, LEADERBOARD,
+    CHARACTERS,
     drawCharacter, drawBone, drawHydrant, drawPineapple, drawSeagull, drawSquirrel, drawCactus,
     getCharHitbox, getObstacleHitbox,
     loadHighScores, saveHighScore, getGlobalHi, loadStats, recordGame,

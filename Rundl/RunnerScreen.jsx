@@ -231,9 +231,9 @@ function BendRunnerScreen({ theme, charId, onBack, onBoard }) {
         s.charY  += s.charVY;
         if (s.charY >= 0) { s.charY = 0; s.charVY = 0; s.jumping = false; }
 
-        // Speed ramp — accelerates continuously, caps at 16px/frame (~score 3700).
-        // Steeper + higher cap than the prototype so the run keeps getting harder.
-        s.speed = Math.min(16, 5 + s.score * 0.0030);
+        // Speed ramp — accelerates continuously, caps at 16px/frame (~score 2000).
+        // Steep early ramp so the run gets hard quickly, not just eventually.
+        s.speed = Math.min(16, 5 + s.score * 0.0055);
 
         // Score
         s.score += s.speed * 0.05;
@@ -251,16 +251,23 @@ function BendRunnerScreen({ theme, charId, onBack, onBoard }) {
         if (s.spawnTimer >= s.nextSpawn) {
           s.spawnTimer = 0;
           // Obstacles pack tighter and arrive more relentlessly as the score climbs.
-          var gap = Math.max(36, 78 - s.score * 0.017);
-          var jitter = Math.max(14, 40 - s.score * 0.006);
+          var gap = Math.max(32, 78 - s.score * 0.030);
+          var jitter = Math.max(12, 40 - s.score * 0.010);
           s.nextSpawn = gap + Math.random() * jitter;
           var types = ['bone', 'bone', 'hydrant', 'pineapple', 'squirrel'];
-          if (s.score > 150) types.push('cactus');
-          if (s.score > 220) types.push('seagull');
-          if (s.score > 600) types.push('seagull', 'cactus', 'squirrel');
+          if (s.score > 90) types.push('cactus');
+          if (s.score > 150) types.push('seagull');
+          if (s.score > 420) types.push('seagull', 'cactus', 'squirrel');
           var t = types[Math.floor(Math.random() * types.length)];
           var ob = { type: t, x: GW + 30 };
-          if (t === 'seagull') ob.birdY = GROUND_Y - 72 - Math.random() * 52;
+          if (t === 'seagull') {
+            // Variable heights so seagulls aren't predictable: sometimes down at the
+            // runner's own height (must jump), sometimes high overhead (don't jump).
+            var rr = Math.random();
+            if (rr < 0.40)      ob.birdY = GROUND_Y - 16 - Math.random() * 18;  // low — runner height
+            else if (rr < 0.70) ob.birdY = GROUND_Y - 48 - Math.random() * 22;  // mid
+            else                ob.birdY = GROUND_Y - 86 - Math.random() * 38;  // high — overhead
+          }
           s.obstacles.push(ob);
         }
 

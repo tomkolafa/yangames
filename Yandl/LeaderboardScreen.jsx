@@ -5,7 +5,6 @@ function LeaderboardScreen({ theme }) {
   var Game  = window.YandlGame;
   var dark  = theme === 'clean-dark' || theme === 'funky';
   var stats = Game.loadStats();
-  var lb    = Game.LEADERBOARD;
   var todayResult = Game.loadTodayResult();
   var puzzleNum   = Game.getPuzzleNumber();
 
@@ -19,14 +18,16 @@ function LeaderboardScreen({ theme }) {
   var cardBg     = dark ? 'rgba(255,255,255,.06)' : '#fff';
   var cardBorder = dark ? 'rgba(255,255,255,.08)' : 'var(--hairline)';
 
-  // Live "today's players" board (Supabase) with graceful fallback to sample.
+  // Live "today's players" board (Supabase) — real players only, no seed data.
   var myName = (window.YanLeaderboard && window.YanLeaderboard.getName()) || '';
-  var [online, setOnline] = React.useState(null);
+  var [online, setOnline] = React.useState(null);   // null = still loading
   React.useEffect(function() {
     if (window.YanLeaderboard && window.YanLeaderboard.ENABLED) {
       window.YanLeaderboard.fetchTop('yandl', { puzzle: puzzleNum, limit: 25 }).then(function(rows) {
-        if (rows) setOnline(rows);
+        setOnline(rows || []);
       });
+    } else {
+      setOnline([]);
     }
   }, []);
 
@@ -36,21 +37,21 @@ function LeaderboardScreen({ theme }) {
     return Math.floor(s / 60) + ':' + ('0' + (s % 60)).slice(-2);
   }
 
-  var lbWithYou;
-  if (online && online.length) {
-    lbWithYou = online.map(function(r) {
-      return { name: r.name, emoji: r.emoji || '😺', guesses: r.guesses, time: fmtTime(r.time_ms),
-               isYou: !!myName && r.name === myName };
-    });
-  } else {
-    lbWithYou = lb.slice();
-    if (todayResult && todayResult.guesses) {
-      var myGuesses = todayResult.guesses.length;
-      var insertIdx = lbWithYou.findIndex(function(e) { return e.guesses > myGuesses; });
-      var youEntry = { name: 'You', emoji: '😺', guesses: myGuesses, time: '--:--', isYou: true };
-      if (insertIdx === -1) lbWithYou.push(youEntry);
-      else lbWithYou.splice(insertIdx, 0, youEntry);
-    }
+  var loading = online === null;
+  var lbWithYou = (online || []).map(function(r) {
+    return { name: r.name, emoji: r.emoji || '😺', guesses: r.guesses, time: fmtTime(r.time_ms),
+             isYou: !!myName && r.name === myName };
+  });
+  // If you've finished today but aren't in the fetched rows, add your real result.
+  if (todayResult && todayResult.guesses && !lbWithYou.some(function(e) { return e.isYou; })) {
+    var myGuesses = todayResult.guesses.length;
+    var myMs = (todayResult.timeMs != null) ? todayResult.timeMs
+             : (todayResult.endedAt && todayResult.startedAt) ? (todayResult.endedAt - todayResult.startedAt)
+             : null;
+    var youEntry = { name: myName || 'You', emoji: '😺', guesses: myGuesses, time: fmtTime(myMs), isYou: true };
+    var insertIdx = lbWithYou.findIndex(function(e) { return e.guesses > myGuesses; });
+    if (insertIdx === -1) lbWithYou.push(youEntry);
+    else lbWithYou.splice(insertIdx, 0, youEntry);
   }
 
   function SectionLabel(props) {
@@ -155,37 +156,56 @@ function LeaderboardScreen({ theme }) {
         {/* Today's leaderboard */}
         <div>
           <SectionLabel>Today's Players</SectionLabel>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-            {lbWithYou.map(function(entry, i) {
-              var isYou = entry.isYou;
-              return React.createElement('div', {
-                key: i,
-                style: {
-                  display: 'flex', alignItems: 'center', gap: 10,
-                  padding: '10px 12px', borderRadius: 'var(--radius-sm)',
-                  background: isYou ? (dark ? 'rgba(232,117,92,.18)' : 'var(--brand-tint)') : 'transparent',
-                }
-              },
-                React.createElement('div', {
-                  style: { width: 20, fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 12, color: mutedColor, textAlign: 'right', flexShrink: 0 }
-                }, '#' + (i + 1)),
-                React.createElement('div', {
-                  style: { width: 36, height: 36, borderRadius: '50%', background: dark ? 'rgba(255,255,255,.1)' : 'var(--bg-sunken)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0 }
-                }, entry.emoji),
-                React.createElement('div', { style: { flex: 1 } },
+          {loading ? (
+            <div style={{ padding: '20px 6px', textAlign: 'center', fontSize: 13, color: mutedColor }}>
+              Loading today's players…
+            </div>
+          ) : lbWithYou.length ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+              {lbWithYou.map(function(entry, i) {
+                var isYou = entry.isYou;
+                return React.createElement('div', {
+                  key: i,
+                  style: {
+                    display: 'flex', alignItems: 'center', gap: 10,
+                    padding: '10px 12px', borderRadius: 'var(--radius-sm)',
+                    background: isYou ? (dark ? 'rgba(232,117,92,.18)' : 'var(--brand-tint)') : 'transparent',
+                  }
+                },
                   React.createElement('div', {
-                    style: { fontWeight: 700, fontSize: 14, color: isYou ? 'var(--brand)' : 'var(--game-text)' }
-                  }, entry.name + (isYou ? ' (You)' : '')),
+                    style: { width: 20, fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 12, color: mutedColor, textAlign: 'right', flexShrink: 0 }
+                  }, '#' + (i + 1)),
                   React.createElement('div', {
-                    style: { fontSize: 12, color: mutedColor }
-                  }, entry.guesses + ' guess' + (entry.guesses === 1 ? '' : 'es'))
-                ),
-                React.createElement('div', {
-                  style: { fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 12, color: mutedColor }
-                }, entry.time)
-              );
-            })}
-          </div>
+                    style: { width: 36, height: 36, borderRadius: '50%', background: dark ? 'rgba(255,255,255,.1)' : 'var(--bg-sunken)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, flexShrink: 0 }
+                  }, entry.emoji),
+                  React.createElement('div', { style: { flex: 1 } },
+                    React.createElement('div', {
+                      style: { fontWeight: 700, fontSize: 14, color: isYou ? 'var(--brand)' : 'var(--game-text)' }
+                    }, entry.name + (isYou ? ' (You)' : '')),
+                    React.createElement('div', {
+                      style: { fontSize: 12, color: mutedColor }
+                    }, entry.guesses + ' guess' + (entry.guesses === 1 ? '' : 'es'))
+                  ),
+                  React.createElement('div', {
+                    style: { fontFamily: 'var(--font-body)', fontWeight: 600, fontSize: 12, color: mutedColor }
+                  }, entry.time)
+                );
+              })}
+            </div>
+          ) : (
+            <div style={{
+              padding: '22px 16px', textAlign: 'center',
+              border: '1px dashed ' + cardBorder, borderRadius: 'var(--radius-md)',
+            }}>
+              <div style={{ fontSize: 26, marginBottom: 6 }}>🏆</div>
+              <div style={{ fontWeight: 700, fontSize: 14, color: 'var(--game-text)', marginBottom: 2 }}>
+                No one's finished today's Yandl yet
+              </div>
+              <div style={{ fontSize: 12, color: mutedColor }}>
+                Solve it to be the first on the board!
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

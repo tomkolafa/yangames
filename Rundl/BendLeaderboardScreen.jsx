@@ -207,17 +207,20 @@ function BendLeaderboardScreen({ theme, charId }) {
   var CHAR_COLOR = { B: '#F4B942', E: '#E8755C', N: '#4A4A4A', D: '#9B6B3A' };
   var CHAR_EMOJI = { B: '🐕', E: '🐱', N: '👑', D: '🌭' };
 
-  // Live global leaderboard (Supabase) with graceful fallback to sample data.
+  // Live global leaderboard (Supabase) — real players only, no seed data.
   var myName = (window.YanLeaderboard && window.YanLeaderboard.getName()) || '';
-  var [online, setOnline] = React.useState(null);
+  var [online, setOnline] = React.useState(null);   // null = still loading
   React.useEffect(function () {
     if (window.YanLeaderboard && window.YanLeaderboard.ENABLED) {
       window.YanLeaderboard.fetchTop('rundl', { limit: 25 }).then(function (rows) {
-        if (rows) setOnline(rows);
+        setOnline(rows || []);
       });
+    } else {
+      setOnline([]);
     }
   }, []);
 
+  var loading = online === null;
   var fullLb;
   if (online && online.length) {
     fullLb = online.slice(0, 10).map(function (r) {
@@ -225,11 +228,11 @@ function BendLeaderboardScreen({ theme, charId }) {
                isYou: !!myName && r.name === myName };
     });
   } else {
-    // Sample board + your local per-character bests
-    fullLb = Game.LEADERBOARD.slice();
+    // No online scores yet — show only your own real local bests.
+    fullLb = [];
     Game.CHARACTERS.forEach(function (c) {
       if (hs[c.id]) {
-        fullLb.push({ name: 'You', emoji: CHAR_EMOJI[c.id], char: c.id, score: hs[c.id], isYou: true });
+        fullLb.push({ name: myName || 'You', emoji: CHAR_EMOJI[c.id], char: c.id, score: hs[c.id], isYou: true });
       }
     });
     fullLb.sort(function (a, b) { return b.score - a.score; });
@@ -323,61 +326,80 @@ function BendLeaderboardScreen({ theme, charId }) {
         {/* ── Global rankings ── */}
         <div>
           <SectionLabel>Global Rankings</SectionLabel>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-            {fullLb.map(function (entry, i) {
-              var isYou      = entry.isYou;
-              var entryChar  = Game.CHARACTERS.find(function (c) { return c.id === entry.char; });
-              var rankGlyph  = i < 3 ? MEDALS[i] : ('#' + (i + 1));
-              var rankStyle  = i === 0 ? { color: '#F4D58D', fontSize: 18 }
-                             : i === 1 ? { color: '#C0C0C0', fontSize: 18 }
-                             : i === 2 ? { color: '#CD7F32', fontSize: 18 }
-                             :           { color: mutedColor, fontSize: 12, fontFamily: 'var(--font-body)', fontWeight: 700 };
-              return (
-                <div key={i} style={{
-                  display: 'flex', alignItems: 'center', gap: 10,
-                  padding: '9px 10px', borderRadius: 10,
-                  background: isYou ? (dark ? 'rgba(232,117,92,.17)' : 'var(--brand-tint)') : 'transparent',
-                }}>
-                  {/* Rank */}
-                  <div style={{ width: 22, textAlign: 'center', flexShrink: 0, ...rankStyle }}>
-                    {rankGlyph}
-                  </div>
-
-                  {/* Avatar */}
-                  <div style={{
-                    width: 36, height: 36, borderRadius: '50%',
-                    background: dark ? 'rgba(255,255,255,.1)' : 'var(--bg-sunken)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    overflow: 'hidden', flexShrink: 0,
+          {loading ? (
+            <div style={{ padding: '20px 6px', textAlign: 'center', fontSize: 13, color: mutedColor }}>
+              Loading runners…
+            </div>
+          ) : fullLb.length ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+              {fullLb.map(function (entry, i) {
+                var isYou      = entry.isYou;
+                var entryChar  = Game.CHARACTERS.find(function (c) { return c.id === entry.char; });
+                var rankGlyph  = i < 3 ? MEDALS[i] : ('#' + (i + 1));
+                var rankStyle  = i === 0 ? { color: '#F4D58D', fontSize: 18 }
+                               : i === 1 ? { color: '#C0C0C0', fontSize: 18 }
+                               : i === 2 ? { color: '#CD7F32', fontSize: 18 }
+                               :           { color: mutedColor, fontSize: 12, fontFamily: 'var(--font-body)', fontWeight: 700 };
+                return (
+                  <div key={i} style={{
+                    display: 'flex', alignItems: 'center', gap: 10,
+                    padding: '9px 10px', borderRadius: 10,
+                    background: isYou ? (dark ? 'rgba(232,117,92,.17)' : 'var(--brand-tint)') : 'transparent',
                   }}>
-                    <CharFacePortrait charId={entry.char} size={36} />
-                  </div>
+                    {/* Rank */}
+                    <div style={{ width: 22, textAlign: 'center', flexShrink: 0, ...rankStyle }}>
+                      {rankGlyph}
+                    </div>
 
-                  {/* Name + character */}
-                  <div style={{ flex: 1, minWidth: 0 }}>
+                    {/* Avatar */}
                     <div style={{
-                      fontWeight: 700, fontSize: 13,
-                      color: isYou ? 'var(--brand)' : 'var(--game-text)',
-                      overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                      width: 36, height: 36, borderRadius: '50%',
+                      background: dark ? 'rgba(255,255,255,.1)' : 'var(--bg-sunken)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      overflow: 'hidden', flexShrink: 0,
                     }}>
-                      {entry.name}{isYou ? ' (You)' : ''}
+                      <CharFacePortrait charId={entry.char} size={36} />
                     </div>
-                    <div style={{ fontSize: 11, color: mutedColor }}>
-                      {entryChar ? entryChar.name : entry.char}
-                    </div>
-                  </div>
 
-                  {/* Score */}
-                  <div style={{
-                    fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 16,
-                    color: 'var(--game-text)', flexShrink: 0,
-                  }}>
-                    {String(entry.score).padStart(5, '0')}
+                    {/* Name + character */}
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{
+                        fontWeight: 700, fontSize: 13,
+                        color: isYou ? 'var(--brand)' : 'var(--game-text)',
+                        overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                      }}>
+                        {entry.name}{isYou ? ' (You)' : ''}
+                      </div>
+                      <div style={{ fontSize: 11, color: mutedColor }}>
+                        {entryChar ? entryChar.name : entry.char}
+                      </div>
+                    </div>
+
+                    {/* Score */}
+                    <div style={{
+                      fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 16,
+                      color: 'var(--game-text)', flexShrink: 0,
+                    }}>
+                      {String(entry.score).padStart(5, '0')}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div style={{
+              padding: '22px 16px', textAlign: 'center',
+              border: '1px dashed ' + cardBorder, borderRadius: 12,
+            }}>
+              <div style={{ fontSize: 26, marginBottom: 6 }}>🏁</div>
+              <div style={{ fontWeight: 700, fontSize: 14, color: 'var(--game-text)', marginBottom: 2 }}>
+                No runs on the board yet
+              </div>
+              <div style={{ fontSize: 12, color: mutedColor }}>
+                Play a round to claim the top spot!
+              </div>
+            </div>
+          )}
         </div>
 
         {/* ── Tips ── */}

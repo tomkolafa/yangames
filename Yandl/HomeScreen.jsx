@@ -20,11 +20,28 @@ function HomeScreen({ onPlay, onHowToPlay, theme }) {
 
   return (
     <div style={{
+      position: 'relative',
       flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center',
       justifyContent: 'space-between', padding: '28px 24px 24px',
       background: 'var(--game-bg)', color: 'var(--game-text)',
       textAlign: 'center', overflowY: 'auto', minHeight: 0,
     }}>
+
+      {/* Back to game selection */}
+      <button
+        onClick={function () { window.location.href = '../index.html'; }}
+        aria-label="Back to game selection"
+        style={{
+          position: 'absolute', top: 6, left: 6, zIndex: 5,
+          width: 38, height: 38, borderRadius: '50%',
+          border: 'none', background: 'transparent', cursor: 'pointer',
+          color: 'var(--game-text)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          WebkitTapHighlightColor: 'transparent',
+        }}
+      >
+        <IconBack size={22} />
+      </button>
 
       {/* Top badge */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>

@@ -114,22 +114,10 @@ window.YandlGame = (function () {
     return `Yandl #${puzzleNum} ${guesses.length}/6\n\n${rows}`;
   }
 
-  const LEADERBOARD = [
-    { name: 'Luna',   emoji: '🐱', guesses: 2, time: '0:42' },
-    { name: 'Jasper', emoji: '🦊', guesses: 3, time: '1:14' },
-    { name: 'Nova',   emoji: '🐨', guesses: 3, time: '1:55' },
-    { name: 'Mochi',  emoji: '🐼', guesses: 4, time: '2:08' },
-    { name: 'Pixel',  emoji: '🐧', guesses: 4, time: '2:50' },
-    { name: 'Cleo',   emoji: '🦁', guesses: 5, time: '3:31' },
-    { name: 'Zara',   emoji: '🐯', guesses: 5, time: '4:12' },
-    { name: 'Cosmo',  emoji: '🐻', guesses: 6, time: '5:20' },
-  ];
-
   return {
     getDailyWord, getPuzzleNumber, getDateKey, isValidWord,
     evaluate, mergeLetters, computeLetterStates, determineStatus,
     loadStats, recordResult,
     loadTodayResult, saveTodayResult, buildShareText,
-    LEADERBOARD,
   };
 })();
