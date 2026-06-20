@@ -164,25 +164,20 @@ function ResultPanel({ theme, dark, status, guesses, answer, timeMs, onStats, on
   var [copied, setCopied] = React.useState(false);
 
   var LB = window.YanLeaderboard;
+  var ID = window.YanIdentity;
   var lbOn = !!(LB && LB.ENABLED);
   var [saved, setSaved] = React.useState(false);
-  var [nameInput, setNameInput] = React.useState(function() { return (LB && LB.getName()) || ''; });
+  var [showPrompt, setShowPrompt] = React.useState(false);
 
-  function saveScore(rawName) {
-    if (!lbOn) return;
-    var nm = LB.setName(rawName);
-    if (!nm) return;
-    setNameInput(nm);
+  function submitWith(nm) {
+    if (!lbOn || !nm) return;
     LB.submit({ game: 'yandl', name: nm, emoji: '😺', guesses: guesses.length, time_ms: timeMs, puzzle: puzzleNum });
     setSaved(true);
   }
 
   // Auto-submit a win if we already know the player's name
   React.useEffect(function() {
-    if (won && lbOn && !saved && LB.getName()) {
-      LB.submit({ game: 'yandl', name: LB.getName(), emoji: '😺', guesses: guesses.length, time_ms: timeMs, puzzle: puzzleNum });
-      setSaved(true);
-    }
+    if (won && lbOn && !saved && LB.getName()) submitWith(LB.getName());
   }, []);
 
   var handleShare = function() {
@@ -222,33 +217,21 @@ function ResultPanel({ theme, dark, status, guesses, answer, timeMs, onStats, on
         saved ? (
           <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--accent-success)' }}>Added to leaderboard ✓</div>
         ) : (
-          <div style={{ display: 'flex', gap: 8, width: '100%', maxWidth: 280 }}>
-            <input
-              value={nameInput}
-              onChange={function(e) { setNameInput(e.target.value); }}
-              onKeyDown={function(e) { if (e.key === 'Enter') saveScore(nameInput); }}
-              placeholder="Your name"
-              maxLength={24}
-              style={{
-                flex: 1, minWidth: 0,
-                border: '2px solid ' + (dark ? 'rgba(255,255,255,.22)' : 'var(--hairline)'),
-                background: dark ? 'rgba(255,255,255,.08)' : '#fff',
-                color: dark ? '#fff' : 'var(--text-body)',
-                borderRadius: 999, padding: '9px 14px', fontSize: 14, fontWeight: 600,
-                fontFamily: 'var(--font-body)', outline: 'none',
-              }}
-            />
-            <button
-              onClick={function() { saveScore(nameInput); }}
-              style={{
-                border: 'none', background: 'var(--brand)', color: '#fff',
-                fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 14,
-                padding: '10px 16px', borderRadius: 999, cursor: 'pointer', flexShrink: 0,
-                boxShadow: '0 3px 0 rgba(0,0,0,.15)', WebkitTapHighlightColor: 'transparent',
-              }}>Add</button>
-          </div>
+          <button
+            onClick={function() { setShowPrompt(true); }}
+            style={{
+              border: 'none', background: 'var(--brand)', color: '#fff',
+              fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 14,
+              padding: '10px 18px', borderRadius: 999, cursor: 'pointer',
+              boxShadow: '0 3px 0 rgba(0,0,0,.15)', WebkitTapHighlightColor: 'transparent',
+            }}>Add your name to save your score</button>
         )
       )}
+      {showPrompt && ID && React.createElement(ID.NamePrompt, {
+        theme: theme, dismissible: true,
+        onSave: function(nm) { setShowPrompt(false); submitWith(nm); },
+        onClose: function() { setShowPrompt(false); },
+      })}
       <div style={{ display: 'flex', gap: 10, width: '100%', maxWidth: 280 }}>
         <Button variant="secondary" size="sm" fullWidth onClick={handleShare}
           style={{ flex: 1 }}>

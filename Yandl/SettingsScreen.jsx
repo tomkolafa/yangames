@@ -80,6 +80,18 @@ function SettingsScreen({ theme, setTheme }) {
 
       <div style={{ flex: 1, overflowY: 'auto', padding: '12px 18px 32px', minHeight: 0 }}>
 
+        {/* Profile */}
+        {window.YanIdentity && (
+          <React.Fragment>
+            <SectionLabel>Profile</SectionLabel>
+            <Row label="Your name" desc="Shown on the leaderboard across all our games"
+              control={null} />
+            <div style={{ paddingBottom: 6 }}>
+              {React.createElement(window.YanIdentity.NameField, { theme: theme })}
+            </div>
+          </React.Fragment>
+        )}
+
         {/* Appearance */}
         <SectionLabel>Appearance</SectionLabel>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 8 }}>

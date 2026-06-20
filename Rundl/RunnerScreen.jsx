@@ -23,25 +23,20 @@ function BendRunnerScreen({ theme, charId, onBack, onBoard }) {
 
   // ── Online leaderboard submission ─────────────────────────────────
   var LB   = window.YanLeaderboard;
+  var ID   = window.YanIdentity;
   var lbOn = !!(LB && LB.ENABLED);
-  var [saved,     setSaved]     = React.useState(false);
-  var [nameInput, setNameInput] = React.useState(function () { return (LB && LB.getName()) || ''; });
+  var [saved,      setSaved]      = React.useState(false);
+  var [showPrompt, setShowPrompt] = React.useState(false);
 
-  function saveScore(rawName) {
-    if (!lbOn) return;
-    var nm = LB.setName(rawName);
-    if (!nm) return;
-    setNameInput(nm);
+  function submitWith(nm) {
+    if (!lbOn || !nm) return;
     LB.submit({ game: 'rundl', name: nm, emoji: CHAR_EMOJI[charId], score: finalScore, char_id: charId });
     setSaved(true);
   }
 
   // Auto-submit on death once we already know the player's name
   React.useEffect(function () {
-    if (phase === 'dead' && finalScore > 0 && lbOn && !saved && LB.getName()) {
-      LB.submit({ game: 'rundl', name: LB.getName(), emoji: CHAR_EMOJI[charId], score: finalScore, char_id: charId });
-      setSaved(true);
-    }
+    if (phase === 'dead' && finalScore > 0 && lbOn && !saved && LB.getName()) submitWith(LB.getName());
   }, [phase, finalScore]);
 
   // ── Start / restart game ──────────────────────────────────────────
@@ -396,33 +391,22 @@ function BendRunnerScreen({ theme, charId, onBack, onBoard }) {
                 {saved ? (
                   <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--accent-success)' }}>Saved to leaderboard ✓</div>
                 ) : (
-                  <React.Fragment>
-                    <input
-                      value={nameInput}
-                      onChange={function (e) { setNameInput(e.target.value); }}
-                      onKeyDown={function (e) { if (e.key === 'Enter') saveScore(nameInput); }}
-                      placeholder="Your name"
-                      maxLength={24}
-                      style={{
-                        border: '2px solid ' + (dark ? 'rgba(255,255,255,.22)' : 'var(--hairline)'),
-                        background: dark ? 'rgba(255,255,255,.08)' : '#fff',
-                        color: dark ? '#fff' : 'var(--text-body)',
-                        borderRadius: 999, padding: '9px 16px', fontSize: 14, fontWeight: 600,
-                        fontFamily: 'var(--font-body)', width: 150, outline: 'none',
-                      }}
-                    />
-                    <button
-                      onClick={function (e) { e.stopPropagation(); saveScore(nameInput); }}
-                      style={{
-                        border: 'none', background: charColor, color: '#fff',
-                        fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 14,
-                        padding: '10px 18px', borderRadius: 999, cursor: 'pointer',
-                        boxShadow: '0 3px 0 rgba(0,0,0,.20)', WebkitTapHighlightColor: 'transparent',
-                      }}>Save</button>
-                  </React.Fragment>
+                  <button
+                    onClick={function (e) { e.stopPropagation(); setShowPrompt(true); }}
+                    style={{
+                      border: 'none', background: charColor, color: '#fff',
+                      fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 14,
+                      padding: '10px 18px', borderRadius: 999, cursor: 'pointer',
+                      boxShadow: '0 3px 0 rgba(0,0,0,.20)', WebkitTapHighlightColor: 'transparent',
+                    }}>Add your name to save your score</button>
                 )}
               </div>
             )}
+            {showPrompt && ID && React.createElement(ID.NamePrompt, {
+              theme: theme, dismissible: true,
+              onSave: function (nm) { setShowPrompt(false); submitWith(nm); },
+              onClose: function () { setShowPrompt(false); },
+            })}
 
             <div style={{ display: 'flex', gap: 10 }}>
               <button

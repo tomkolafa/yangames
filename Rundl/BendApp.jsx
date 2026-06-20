@@ -49,6 +49,8 @@ function BendApp() {
   var [theme,   setTheme]   = React.useState(function () { return localStorage.getItem('bend-theme') || 'clean-light'; });
   var [charId,  setCharId]  = React.useState(function () { return localStorage.getItem('bend-char')  || 'B'; });
   var [gameKey, setGameKey] = React.useState(0);
+  var ID = window.YanIdentity;
+  var [showNamePrompt, setShowNamePrompt] = React.useState(function () { return !!ID && !ID.getName() && !ID.isOnboarded(); });
 
   var saveTheme = function (t) { setTheme(t); localStorage.setItem('bend-theme', t); };
   var saveChar  = function (c) { setCharId(c); localStorage.setItem('bend-char', c); };
@@ -84,6 +86,11 @@ function BendApp() {
           theme, setTheme: saveTheme,
         })}
         {showNav && React.createElement(BendBottomNav, { screen, onTab: handleTab, theme })}
+        {showNamePrompt && ID && React.createElement(ID.NamePrompt, {
+          theme, dismissible: true,
+          onSave: function () { setShowNamePrompt(false); },
+          onClose: function () { setShowNamePrompt(false); },
+        })}
       </div>
     </div>
   );

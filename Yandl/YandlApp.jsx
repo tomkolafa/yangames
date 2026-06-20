@@ -52,6 +52,8 @@ function App() {
   var [prevScreen, setPrevScreen] = React.useState('home');
   var [theme,      setTheme]      = React.useState(function() { return localStorage.getItem('yandl-theme') || 'clean-light'; });
   var [gameKey,    setGameKey]    = React.useState(0);
+  var ID = window.YanIdentity;
+  var [showNamePrompt, setShowNamePrompt] = React.useState(function() { return !!ID && !ID.getName() && !ID.isOnboarded(); });
 
   var saveTheme = function(t) { setTheme(t); localStorage.setItem('yandl-theme', t); };
 
@@ -83,6 +85,11 @@ function App() {
         {screen === 'leaderboard' && React.createElement(LeaderboardScreen, { theme: theme })}
         {screen === 'settings' && React.createElement(SettingsScreen, { theme: theme, setTheme: saveTheme })}
         {showBottomNav && React.createElement(BottomNav, { screen: screen, onTab: handleTab, theme: theme })}
+        {showNamePrompt && ID && React.createElement(ID.NamePrompt, {
+          theme: theme, dismissible: true,
+          onSave: function() { setShowNamePrompt(false); },
+          onClose: function() { setShowNamePrompt(false); },
+        })}
       </div>
     </div>
   );
