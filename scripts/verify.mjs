@@ -68,7 +68,10 @@ async function check(name, url, fn) {
 }
 
 // Enter a game from its home screen by tapping the "Play" bottom-nav tab.
+// First dismiss the first-run name prompt if present (its overlay covers the nav).
 async function enterGame(page) {
+  const later = page.locator('button', { hasText: 'Maybe later' });
+  if (await later.count()) { await later.first().click().catch(() => {}); await page.waitForTimeout(200); }
   await page.locator('button', { hasText: 'Play' }).first().click();
   await page.waitForTimeout(700);
 }
@@ -103,6 +106,17 @@ await check('rundl', '/Rundl/index.html', async (page) => {
   await page.waitForTimeout(1800);  // let it run + accelerate
   await page.mouse.click(195, 460); // jump
   await page.waitForTimeout(500);
+});
+
+await check('snakl', '/Snakl/index.html', async (page) => {
+  await enterGame(page);              // into the snake screen
+  await page.waitForTimeout(400);
+  await page.keyboard.press('ArrowUp');    // first input starts the game + turns
+  await page.waitForTimeout(700);
+  await page.keyboard.press('ArrowRight');
+  await page.waitForTimeout(700);
+  await page.keyboard.press('ArrowDown');  // exercise turning, ticking, drawing
+  await page.waitForTimeout(900);
 });
 
 await browser.close();

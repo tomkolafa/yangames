@@ -17,15 +17,15 @@ window.YanLeaderboard = (function () {
   }
   function rest(qs) { return URL + '/rest/v1/' + qs; }
 
-  // Top scores. Rundl → highest score first. Yandl → fewest guesses then
-  // fastest time for a given puzzle number.
+  // Top scores. Rundl / Snakl → highest score first. Yandl → fewest guesses
+  // then fastest time for a given puzzle number.
   function fetchTop(game, opts) {
     if (!ENABLED) return Promise.resolve(null);
     opts = opts || {};
     var sel = 'select=name,emoji,score,guesses,time_ms,char_id,created_at';
     var qs;
-    if (game === 'rundl') {
-      qs = 'scores?game=eq.rundl&' + sel + '&order=score.desc&limit=' + (opts.limit || 25);
+    if (game === 'rundl' || game === 'snakl') {
+      qs = 'scores?game=eq.' + game + '&' + sel + '&order=score.desc&limit=' + (opts.limit || 25);
     } else {
       qs = 'scores?game=eq.yandl&' + sel;
       if (opts.puzzle != null) qs += '&puzzle=eq.' + encodeURIComponent(opts.puzzle);

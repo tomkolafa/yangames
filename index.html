@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>YanGames — Yandl &amp; Rundl</title>
+<title>YanGames — Yandl, Rundl &amp; Snakl</title>
 <meta name="theme-color" content="#FBF7F0" />
-<meta name="description" content="YanGames — a tiny collection of daily games. Play Yandl and Rundl." />
+<meta name="description" content="YanGames — a tiny collection of daily games. Play Yandl, Rundl and Snakl." />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -98,6 +98,25 @@ function RunnerIcon({ size }) {
       <line x1="16" y1="32" x2="10" y2="32" stroke="#F4B942" strokeWidth="2.5" strokeLinecap="round" opacity="0.5" />
       <line x1="18" y1="40" x2="10" y2="40" stroke="#F4B942" strokeWidth="2.5" strokeLinecap="round" opacity="0.35" />
       <line x1="17" y1="48" x2="12" y2="48" stroke="#F4B942" strokeWidth="2.5" strokeLinecap="round" opacity="0.25" />
+    </svg>
+  );
+}
+
+function SnakeIcon({ size }) {
+  var s = size || 80;
+  return (
+    <svg width={s} height={s} viewBox="0 0 80 80" fill="none">
+      {/* Coiling snake body */}
+      <path d="M16 62 C 16 46, 40 54, 40 39 C 40 24, 60 31, 60 18" stroke="#8FD3B6" strokeWidth="10" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+      <path d="M16 62 C 16 46, 40 54, 40 39 C 40 24, 60 31, 60 18" stroke="#B7E6CF" strokeWidth="4" strokeLinecap="round" fill="none" />
+      {/* Head */}
+      <circle cx="61" cy="17" r="9" fill="#7BC9A6" />
+      <circle cx="57.5" cy="14.5" r="1.8" fill="#2E2A28" />
+      <circle cx="64.5" cy="14.5" r="1.8" fill="#2E2A28" />
+      {/* Forked tongue */}
+      <path d="M61 8 L61 3 M61 3 L59 1 M61 3 L63 1" stroke="#E8755C" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+      {/* Treat */}
+      <circle cx="14" cy="65" r="4.5" fill="#F4B942" />
     </svg>
   );
 }
@@ -305,8 +324,27 @@ function WelcomeApp() {
           }
         />
 
-        {/* Coming soon placeholder */}
-        <ComingSoonCard />
+        {/* Snakl card */}
+        <GameCard
+          title="Snakl"
+          subtitle="Guide your pet, eat, grow"
+          href="Snakl/index.html"
+          accentColor="#8FD3B6"
+          accentBg="rgba(143,211,182,.32)"
+          delay={0.8}
+          illustration={
+            <div style={{ filter: 'drop-shadow(0 6px 14px rgba(46,42,40,.18))' }}>
+              <SnakeIcon size={92} />
+            </div>
+          }
+          tileLogo={
+            <TileLogo
+              letters={['S','N','A','K','L']}
+              colors={['#8FD3B6','#F4B942','#E8755C','#C7B6E8','#A8D8EA']}
+              size={34}
+            />
+          }
+        />
       </div>
 
       {/* Footer */}

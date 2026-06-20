@@ -4,7 +4,7 @@ import { transform } from 'esbuild';
 import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 
-const dirs = ['Yandl', 'Rundl'];
+const dirs = ['Yandl', 'Rundl', 'Snakl'];
 let errors = 0;
 
 for (const dir of dirs) {

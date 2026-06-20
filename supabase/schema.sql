@@ -4,7 +4,7 @@
 
 create table if not exists public.scores (
   id          bigint generated always as identity primary key,
-  game        text        not null check (game in ('yandl','rundl')),
+  game        text        not null check (game in ('yandl','rundl','snakl')),
   name        text        not null check (char_length(name) between 1 and 24),
   emoji       text        check (char_length(emoji) <= 8),
   score       integer     not null default 0 check (score >= 0 and score <= 1000000),
@@ -17,6 +17,7 @@ create table if not exists public.scores (
 
 -- Fast top-N lookups
 create index if not exists scores_rundl_idx on public.scores (score desc)        where game = 'rundl';
+create index if not exists scores_snakl_idx on public.scores (score desc)        where game = 'snakl';
 create index if not exists scores_yandl_idx on public.scores (puzzle, guesses, time_ms) where game = 'yandl';
 
 -- Row level security: public read, bounded public insert, no update/delete.
@@ -29,7 +30,7 @@ create policy scores_select_public on public.scores
 drop policy if exists scores_insert_public on public.scores;
 create policy scores_insert_public on public.scores
   for insert with check (
-    game in ('yandl','rundl')
+    game in ('yandl','rundl','snakl')
     and char_length(name) between 1 and 24
     and score between 0 and 1000000
   );
