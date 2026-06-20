@@ -33,7 +33,7 @@ const STATIC = [
   'styles.css', 'app.css', 'pwa.js', 'sw.js', 'manifest.webmanifest',
   'icon.svg', 'icon-180.png', 'icon-192.png', 'icon-512.png',
   '_ds_bundle.js', 'config.js', 'leaderboard.js', 'identity.js', 'sound.js', 'og.png', 'tokens', 'assets',
-  'Yandl/words.js', 'Yandl/game.js', 'Rundl/game.js', 'Snakl/game.js',
+  'Yandl/words.js', 'Yandl/game.js', 'Rundl/game.js', 'Snakl/game.js', 'Bacle/game.js',
 ];
 for (const rel of STATIC) {
   await mkdir(path.join(DIST, path.dirname(rel)), { recursive: true });
@@ -93,6 +93,12 @@ const GAMES = [
     files: ['SnaklHomeScreen.jsx', 'SnaklGameScreen.jsx', 'SnaklLeaderboardScreen.jsx',
       'SnaklSettingsScreen.jsx', 'SnaklApp.jsx'],
     boot: "ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(window.SnaklApp));",
+  },
+  {
+    dir: 'Bacle', bundle: 'app.bundle.js',
+    files: ['BacleHomeScreen.jsx', 'BacleGameScreen.jsx', 'BacleLeaderboardScreen.jsx',
+      'BacleSettingsScreen.jsx', 'BacleApp.jsx'],
+    boot: "ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(window.BacleApp));",
   },
 ];
 

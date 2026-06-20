@@ -119,6 +119,23 @@ await check('snakl', '/Snakl/index.html', async (page) => {
   await page.waitForTimeout(900);
 });
 
+await check('bacle', '/Bacle/index.html', async (page) => {
+  // every level's maze (incl. per-level mazeMods) must be fully connected
+  const mazeOk = await page.evaluate(() => {
+    const G = window.BacleGame;
+    return G.LEVELS.every((lv) => G.validateMaze(G.parseMaze(G.MAZE_MAIN, lv.mazeMods)));
+  });
+  if (!mazeOk) throw new Error('a level maze is not fully connected (unreachable pellets)');
+  await enterGame(page);                    // into the maze screen
+  await page.waitForTimeout(400);
+  await page.keyboard.press('ArrowLeft');   // first input starts the run
+  await page.waitForTimeout(1900);          // intro card + chomp pellets
+  await page.keyboard.press('ArrowUp');
+  await page.waitForTimeout(900);
+  await page.keyboard.press('ArrowRight');  // exercise turning, ghost AI, drawing
+  await page.waitForTimeout(1200);
+});
+
 await browser.close();
 server.close();
 console.log(failures ? `\n✗ ${failures} page(s) had problems` : '\n✓ all pages mounted with no console errors');
