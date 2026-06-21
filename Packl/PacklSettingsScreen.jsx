@@ -39,7 +39,7 @@ function PacklSettingsScreen({ theme, setTheme }) {
     return React.createElement('div', {
       style: {
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '13px 0', borderBottom: '1px solid ' + divColor,
+        padding: '13px 0',
         gap: 12,
       }
     },
@@ -69,7 +69,6 @@ function PacklSettingsScreen({ theme, setTheme }) {
       {/* Header */}
       <div style={{
         padding: '16px 18px 12px', flexShrink: 0,
-        borderBottom: '1px solid ' + divColor,
       }}>
         <div style={{ fontFamily: 'var(--title-font)', fontWeight: 'var(--title-weight)', color: 'var(--title-color)', textTransform: 'var(--title-transform)', letterSpacing: 'var(--title-spacing)', fontSize: 22 }}>
           Settings

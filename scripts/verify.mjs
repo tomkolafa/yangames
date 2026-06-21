@@ -67,12 +67,13 @@ async function check(name, url, fn) {
   await page.close();
 }
 
-// Enter a game from its home screen by tapping the "Play" bottom-nav tab.
-// First dismiss the first-run name prompt if present (its overlay covers the nav).
-async function enterGame(page) {
+// Enter a game from its home screen by tapping its primary call-to-action button
+// (the "Play" bottom-nav tab was removed — the home CTA is now the only entry point).
+// First dismiss the first-run name prompt if present (its overlay covers the screen).
+async function enterGame(page, cta) {
   const later = page.locator('button', { hasText: 'Maybe later' });
   if (await later.count()) { await later.first().click().catch(() => {}); await page.waitForTimeout(200); }
-  await page.locator('button', { hasText: 'Play' }).first().click();
+  await page.locator('button', { hasText: cta }).first().click();
   await page.waitForTimeout(700);
 }
 
@@ -82,7 +83,7 @@ await check('yandl', '/Yandl/index.html', async (page) => {
   await page.evaluate(() => localStorage.clear());
   await page.reload({ waitUntil: 'networkidle' });
   await page.waitForTimeout(1500);
-  await enterGame(page);
+  await enterGame(page, "Play Today's Yandl");
   for (const k of ['c', 'r', 'a', 'n', 'e']) await page.keyboard.press(k);
   await page.keyboard.press('Enter');
   await page.waitForTimeout(1400); // let the flip reveal play
@@ -92,7 +93,7 @@ await check('yandl-badword', '/Yandl/index.html', async (page) => {
   await page.evaluate(() => localStorage.clear());
   await page.reload({ waitUntil: 'networkidle' });
   await page.waitForTimeout(1500);
-  await enterGame(page);
+  await enterGame(page, "Play Today's Yandl");
   for (const k of ['z', 'x', 'q', 'w', 'k']) await page.keyboard.press(k);
   await page.keyboard.press('Enter');
   await page.waitForTimeout(500);
@@ -101,7 +102,7 @@ await check('yandl-badword', '/Yandl/index.html', async (page) => {
 });
 
 await check('rundl', '/Rundl/index.html', async (page) => {
-  await enterGame(page);            // into the runner screen
+  await enterGame(page, "Let's Rundl!");   // into the runner screen
   await page.mouse.click(195, 500); // tap to start
   await page.waitForTimeout(1800);  // let it run + accelerate
   await page.mouse.click(195, 460); // jump
@@ -109,7 +110,7 @@ await check('rundl', '/Rundl/index.html', async (page) => {
 });
 
 await check('snakl', '/Snakl/index.html', async (page) => {
-  await enterGame(page);              // into the snake screen
+  await enterGame(page, "Let's Snakl!");   // into the snake screen
   await page.waitForTimeout(400);
   await page.keyboard.press('ArrowUp');    // first input starts the game + turns
   await page.waitForTimeout(700);
@@ -126,7 +127,7 @@ await check('packl', '/Packl/index.html', async (page) => {
     return G.LEVELS.every((lv) => G.validateMaze(G.parseMaze(G.MAZE_MAIN, lv.mazeMods)));
   });
   if (!mazeOk) throw new Error('a level maze is not fully connected (unreachable pellets)');
-  await enterGame(page);                    // into the maze screen
+  await enterGame(page, "Let's Packl!");    // into the maze screen
   await page.waitForTimeout(400);
   await page.keyboard.press('ArrowLeft');   // first input starts the run
   await page.waitForTimeout(1900);          // intro card + chomp pellets

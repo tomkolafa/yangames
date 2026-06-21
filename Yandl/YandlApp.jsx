@@ -5,7 +5,6 @@ function BottomNav({ screen, onTab, theme }) {
   var activeTab = (screen === 'howto') ? 'home' : screen;
   var tabs = [
     { id: 'home',        Icon: window.IconHome,    label: 'Home'   },
-    { id: 'game',        Icon: window.IconPlay,    label: 'Play'   },
     { id: 'leaderboard', Icon: window.IconTrophy,  label: 'Board'  },
     { id: 'settings',    Icon: window.IconGear,    label: 'More'   },
   ];
