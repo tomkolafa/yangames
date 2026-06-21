@@ -159,6 +159,70 @@ function PourlIcon({ size }) {
   );
 }
 
+function MemorlIcon({ size }) {
+  var s = size || 80;
+  // A 3×3 grid with a remembered pattern lit up
+  var lit = { 0: '#C7B6E8', 2: '#8FD3B6', 4: '#F4B942', 7: '#E8755C' };
+  var cells = [];
+  for (var i = 0; i < 9; i++) {
+    var col = i % 3, row = Math.floor(i / 3);
+    cells.push(
+      <rect key={i}
+        x={14 + col * 19} y={14 + row * 19}
+        width="15" height="15" rx="4"
+        fill={lit[i] || '#EAE3D6'} />
+    );
+  }
+  return (
+    <svg width={s} height={s} viewBox="0 0 80 80" fill="none">{cells}</svg>
+  );
+}
+
+function BrewlIcon({ size }) {
+  var s = size || 80;
+  return (
+    <svg width={s} height={s} viewBox="0 0 80 80" fill="none">
+      {/* coffee cup */}
+      <path d="M20 26 H56 V46 a18 18 0 0 1 -18 18 H38 a18 18 0 0 1 -18 -18 Z" fill="#EDE7DD" stroke="#CFC7B8" strokeWidth="2" />
+      {/* coffee fill */}
+      <path d="M22 40 H54 V46 a16 16 0 0 1 -16 16 H38 a16 16 0 0 1 -16 -16 Z" fill="#9B6B3A" />
+      {/* foam line */}
+      <rect x="22" y="39" width="32" height="3" rx="1.5" fill="#F4E8D2" />
+      {/* target line */}
+      <line x1="18" y1="34" x2="58" y2="34" stroke="#56C98A" strokeWidth="2.4" strokeLinecap="round" strokeDasharray="5 4" />
+      {/* handle */}
+      <path d="M56 30 a9 9 0 0 1 0 18" fill="none" stroke="#CFC7B8" strokeWidth="4" />
+      {/* steam */}
+      <path d="M32 20 q3 -4 0 -8 M40 20 q3 -4 0 -8 M48 20 q3 -4 0 -8" stroke="#C7B6E8" strokeWidth="2.4" strokeLinecap="round" opacity="0.7" />
+    </svg>
+  );
+}
+
+function TrainlIcon({ size }) {
+  var s = size || 80;
+  return (
+    <svg width={s} height={s} viewBox="0 0 80 80" fill="none">
+      {/* track splitting into two branches */}
+      <path d="M40 8 V34" stroke="#CFC7B8" strokeWidth="6" strokeLinecap="round" />
+      <path d="M40 34 L20 70" stroke="#CFC7B8" strokeWidth="6" strokeLinecap="round" />
+      <path d="M40 34 L60 70" stroke="#CFC7B8" strokeWidth="6" strokeLinecap="round" />
+      {/* active branch highlight (left) */}
+      <path d="M40 34 L20 70" stroke="#56C98A" strokeWidth="3" strokeLinecap="round" />
+      {/* switch node */}
+      <circle cx="40" cy="34" r="6" fill="#2E2A28" />
+      <circle cx="40" cy="34" r="2.2" fill="#fff" />
+      {/* station depots */}
+      <rect x="13" y="68" width="14" height="9" rx="2" fill="#56C98A" />
+      <rect x="53" y="68" width="14" height="9" rx="2" fill="#4FA3E0" />
+      {/* train on the track */}
+      <g transform="rotate(28 40 22)">
+        <rect x="33" y="16" width="14" height="9" rx="3" fill="#E8755C" />
+        <circle cx="46" cy="20.5" r="1.6" fill="#FFF7D6" />
+      </g>
+    </svg>
+  );
+}
+
 function GameCard({ title, subtitle, href, illustration, tileLogo, accentColor, accentBg, delay }) {
   var [hovered, setHovered] = React.useState(false);
   var [pressed, setPressed] = React.useState(false);
@@ -424,6 +488,72 @@ function WelcomeApp() {
               letters={['P','O','U','R','L']}
               colors={['#4FA3E0','#56C98A','#F4B942','#E8755C','#9B6BD6']}
               size={34}
+            />
+          }
+        />
+
+        {/* Memorl card */}
+        <GameCard
+          title="Memorl"
+          subtitle="Watch the pattern, tap it back"
+          href="Memorl/index.html"
+          accentColor="#C7B6E8"
+          accentBg="rgba(199,182,232,.32)"
+          delay={2.0}
+          illustration={
+            <div style={{ filter: 'drop-shadow(0 6px 14px rgba(46,42,40,.18))' }}>
+              <MemorlIcon size={92} />
+            </div>
+          }
+          tileLogo={
+            <TileLogo
+              letters={['M','E','M','O','R','L']}
+              colors={['#C7B6E8','#8FD3B6','#F4B942','#E8755C','#79D0E0','#F3A9C8']}
+              size={30}
+            />
+          }
+        />
+
+        {/* Brewl card */}
+        <GameCard
+          title="Brewl"
+          subtitle="Fill every cup, mind the spills"
+          href="Brewl/index.html"
+          accentColor="#9B6B3A"
+          accentBg="rgba(155,107,58,.30)"
+          delay={2.4}
+          illustration={
+            <div style={{ filter: 'drop-shadow(0 6px 14px rgba(46,42,40,.18))' }}>
+              <BrewlIcon size={92} />
+            </div>
+          }
+          tileLogo={
+            <TileLogo
+              letters={['B','R','E','W','L']}
+              colors={['#9B6B3A','#E8755C','#F4B942','#56C98A','#79D0E0']}
+              size={34}
+            />
+          }
+        />
+
+        {/* Trainl card */}
+        <GameCard
+          title="Trainl"
+          subtitle="Flip switches, route every train"
+          href="Trainl/index.html"
+          accentColor="#4FA3E0"
+          accentBg="rgba(79,163,224,.30)"
+          delay={2.8}
+          illustration={
+            <div style={{ filter: 'drop-shadow(0 6px 14px rgba(46,42,40,.18))' }}>
+              <TrainlIcon size={92} />
+            </div>
+          }
+          tileLogo={
+            <TileLogo
+              letters={['T','R','A','I','N','L']}
+              colors={['#E8755C','#4FA3E0','#56C98A','#F4B942','#9B6BD6','#79D0E0']}
+              size={30}
             />
           }
         />

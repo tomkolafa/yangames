@@ -33,7 +33,7 @@ const STATIC = [
   'styles.css', 'app.css', 'pwa.js', 'sw.js', 'manifest.webmanifest',
   'icon.svg', 'icon-180.png', 'icon-192.png', 'icon-512.png',
   '_ds_bundle.js', 'config.js', 'leaderboard.js', 'identity.js', 'sound.js', 'og.png', 'tokens', 'assets',
-  'Yandl/words.js', 'Yandl/game.js', 'Rundl/game.js', 'Snakl/game.js', 'Packl/game.js', 'Pourl/game.js',
+  'Yandl/words.js', 'Yandl/game.js', 'Rundl/game.js', 'Snakl/game.js', 'Packl/game.js', 'Pourl/game.js', 'Memorl/game.js', 'Brewl/game.js', 'Trainl/game.js',
 ];
 for (const rel of STATIC) {
   await mkdir(path.join(DIST, path.dirname(rel)), { recursive: true });
@@ -105,6 +105,24 @@ const GAMES = [
     files: ['PourlHomeScreen.jsx', 'PourlGameScreen.jsx', 'PourlLeaderboardScreen.jsx',
       'PourlSettingsScreen.jsx', 'PourlApp.jsx'],
     boot: "ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(window.PourlApp));",
+  },
+  {
+    dir: 'Memorl', bundle: 'app.bundle.js',
+    files: ['MemorlHomeScreen.jsx', 'MemorlGameScreen.jsx', 'MemorlLeaderboardScreen.jsx',
+      'MemorlSettingsScreen.jsx', 'MemorlApp.jsx'],
+    boot: "ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(window.MemorlApp));",
+  },
+  {
+    dir: 'Brewl', bundle: 'app.bundle.js',
+    files: ['BrewlHomeScreen.jsx', 'BrewlGameScreen.jsx', 'BrewlLeaderboardScreen.jsx',
+      'BrewlSettingsScreen.jsx', 'BrewlApp.jsx'],
+    boot: "ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(window.BrewlApp));",
+  },
+  {
+    dir: 'Trainl', bundle: 'app.bundle.js',
+    files: ['TrainlHomeScreen.jsx', 'TrainlGameScreen.jsx', 'TrainlLeaderboardScreen.jsx',
+      'TrainlSettingsScreen.jsx', 'TrainlApp.jsx'],
+    boot: "ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(window.TrainlApp));",
   },
 ];
 

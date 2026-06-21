@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no" />
+<title>Brewl — Trouble Brewing</title>
+<meta name="theme-color" content="#FBF7F0" />
+<meta name="description" content="Brewl — a barista attention game. Fill every cup to the line, track them all at once, and don't let one spill." />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="Brewl" />
+<link rel="manifest" href="/manifest.webmanifest" />
+<link rel="icon" href="/icon.svg" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/icon-180.png" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="YanGames" />
+<meta property="og:url" content="https://yandlgames.vercel.app/Brewl/index.html" />
+<meta property="og:title" content="Brewl — Trouble Brewing" />
+<meta property="og:description" content="Fill every cup to the line, mind the spills." />
+<meta property="og:image" content="https://yandlgames.vercel.app/og.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Brewl — Trouble Brewing" />
+<meta name="twitter:description" content="Fill every cup to the line, mind the spills." />
+<meta name="twitter:image" content="https://yandlgames.vercel.app/og.png" />
+<script src="/pwa.js" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;500;600;700;800&family=Zilla+Slab:wght@400;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../styles.css" />
+<link rel="stylesheet" href="../app.css" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  button { -webkit-tap-highlight-color: transparent; }
+  ::-webkit-scrollbar { width: 0; height: 0; }
+  * { scrollbar-width: none; -ms-overflow-style: none; }
+
+  @keyframes brewl-bounce {
+    0%, 100% { transform: translateY(0) scale(1); }
+    45%       { transform: translateY(-9px) scale(1.05); }
+  }
+  @keyframes brewl-pulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.45; }
+  }
+</style>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../_ds_bundle.js"></script>
+<script src="/config.js"></script>
+<script src="/leaderboard.js"></script>
+<script src="/identity.js"></script>
+<script src="/sound.js"></script>
+<script src="game.js"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="BrewlHomeScreen.jsx"></script>
+<script type="text/babel" src="BrewlGameScreen.jsx"></script>
+<script type="text/babel" src="BrewlLeaderboardScreen.jsx"></script>
+<script type="text/babel" src="BrewlSettingsScreen.jsx"></script>
+<script type="text/babel" src="BrewlApp.jsx"></script>
+
+<script type="text/babel">
+  ReactDOM.createRoot(document.getElementById('root')).render(
+    React.createElement(window.BrewlApp)
+  );
+</script>
+</body>
+</html>
