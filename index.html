@@ -223,6 +223,76 @@ function TrainlIcon({ size }) {
   );
 }
 
+function SpaclIcon({ size }) {
+  var s = size || 80;
+  return (
+    <svg width={s} height={s} viewBox="0 0 80 80" fill="none">
+      {/* stars */}
+      <circle cx="16" cy="18" r="1.6" fill="#C7B6E8" />
+      <circle cx="60" cy="14" r="2" fill="#F4D58D" />
+      <circle cx="24" cy="60" r="1.6" fill="#A8D8EA" />
+      <circle cx="66" cy="54" r="1.6" fill="#8FD3B6" />
+      {/* thruster flame */}
+      <path d="M18 40 L8 35 L8 45 Z" fill="#F4B942" />
+      {/* ship hull pointing right */}
+      <path d="M64 40 L20 22 Q12 40 20 58 Z" fill="#4FA3E0" />
+      <path d="M64 40 L20 58 Q34 48 64 40 Z" fill="#2E7CB8" />
+      {/* cockpit */}
+      <circle cx="30" cy="40" r="7" fill="#EAF6FF" />
+      <circle cx="30" cy="40" r="3.4" fill="#2E2A28" />
+      {/* laser bolts */}
+      <rect x="66" y="38.5" width="9" height="3" rx="1.5" fill="#FFE9A8" />
+    </svg>
+  );
+}
+
+function SliclIcon({ size }) {
+  var s = size || 80;
+  return (
+    <svg width={s} height={s} viewBox="0 0 80 80" fill="none">
+      {/* watermelon sliced in two halves */}
+      <g transform="rotate(-18 40 40)">
+        {/* left half */}
+        <path d="M38 16 A26 26 0 0 0 38 64 Z" fill="#F0577E" />
+        <path d="M38 16 A26 26 0 0 0 38 64 Z" fill="none" stroke="#3FA35A" strokeWidth="5" />
+        {/* right half, nudged apart */}
+        <g transform="translate(8 0)">
+          <path d="M42 16 A26 26 0 0 1 42 64 Z" fill="#F0577E" />
+          <path d="M42 16 A26 26 0 0 1 42 64 Z" fill="none" stroke="#3FA35A" strokeWidth="5" />
+        </g>
+        {/* seeds */}
+        <circle cx="32" cy="32" r="1.8" fill="#2E2A28" />
+        <circle cx="30" cy="44" r="1.8" fill="#2E2A28" />
+        <circle cx="54" cy="32" r="1.8" fill="#2E2A28" />
+        <circle cx="56" cy="44" r="1.8" fill="#2E2A28" />
+      </g>
+      {/* blade streak */}
+      <path d="M8 22 L72 12" stroke="#EAFBF2" strokeWidth="3" strokeLinecap="round" opacity="0.85" />
+    </svg>
+  );
+}
+
+function RoutlIcon({ size }) {
+  var s = size || 80;
+  return (
+    <svg width={s} height={s} viewBox="0 0 80 80" fill="none">
+      {/* dotted planned route */}
+      <path d="M20 64 L20 44 L40 44 L40 24 L60 24 L60 14" stroke="#4FA3E0" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="1 7" />
+      {/* start dock */}
+      <circle cx="20" cy="64" r="5" fill="none" stroke="#5E7A78" strokeWidth="2.5" />
+      {/* patrolling pirate ship */}
+      <g transform="translate(40 44)">
+        <path d="M-6 2 L6 2 L4 7 L-4 7 Z" fill="#3A3550" />
+        <path d="M0 2 L0 -7" stroke="#2A2638" strokeWidth="1.6" />
+        <path d="M0 -7 L6 -3 L0 -1 Z" fill="#E2483D" />
+      </g>
+      {/* treasure X */}
+      <rect x="53" y="9" width="14" height="9" rx="2" fill="#F4B942" />
+      <text x="60" y="11" font-size="11" font-weight="800" fill="#E2483D" text-anchor="middle" font-family="Fredoka, sans-serif">✕</text>
+    </svg>
+  );
+}
+
 function GameCard({ title, subtitle, href, illustration, tileLogo, accentColor, accentBg, delay }) {
   var [hovered, setHovered] = React.useState(false);
   var [pressed, setPressed] = React.useState(false);
@@ -554,6 +624,72 @@ function WelcomeApp() {
               letters={['T','R','A','I','N','L']}
               colors={['#E8755C','#4FA3E0','#56C98A','#F4B942','#9B6BD6','#79D0E0']}
               size={30}
+            />
+          }
+        />
+
+        {/* Spacl card */}
+        <GameCard
+          title="Spacl"
+          subtitle="Fly, blast, survive the waves"
+          href="Spacl/index.html"
+          accentColor="#4FA3E0"
+          accentBg="rgba(79,163,224,.32)"
+          delay={3.2}
+          illustration={
+            <div style={{ filter: 'drop-shadow(0 6px 14px rgba(46,42,40,.18))' }}>
+              <SpaclIcon size={92} />
+            </div>
+          }
+          tileLogo={
+            <TileLogo
+              letters={['S','P','A','C','L']}
+              colors={['#4FA3E0','#8FD3B6','#F4B942','#E8755C','#C7B6E8']}
+              size={34}
+            />
+          }
+        />
+
+        {/* Slicl card */}
+        <GameCard
+          title="Slicl"
+          subtitle="Swipe to slice, dodge the bombs"
+          href="Slicl/index.html"
+          accentColor="#56C98A"
+          accentBg="rgba(86,201,138,.32)"
+          delay={3.6}
+          illustration={
+            <div style={{ filter: 'drop-shadow(0 6px 14px rgba(46,42,40,.18))' }}>
+              <SliclIcon size={92} />
+            </div>
+          }
+          tileLogo={
+            <TileLogo
+              letters={['S','L','I','C','L']}
+              colors={['#3FA35A','#F39B36','#E2483D','#F4D03F','#8E5BD0']}
+              size={34}
+            />
+          }
+        />
+
+        {/* Routl card */}
+        <GameCard
+          title="Routl"
+          subtitle="Chart a course past the pirates"
+          href="Routl/index.html"
+          accentColor="#4FA3E0"
+          accentBg="rgba(79,163,224,.30)"
+          delay={4.0}
+          illustration={
+            <div style={{ filter: 'drop-shadow(0 6px 14px rgba(46,42,40,.18))' }}>
+              <RoutlIcon size={92} />
+            </div>
+          }
+          tileLogo={
+            <TileLogo
+              letters={['R','O','U','T','L']}
+              colors={['#4FA3E0','#3FA35A','#F4B942','#E2483D','#8E5BD0']}
+              size={34}
             />
           }
         />
