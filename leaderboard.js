@@ -24,7 +24,7 @@ window.YanLeaderboard = (function () {
     opts = opts || {};
     var sel = 'select=name,emoji,score,guesses,time_ms,char_id,created_at';
     var qs;
-    if (game === 'rundl' || game === 'snakl' || game === 'packl') {
+    if (game === 'rundl' || game === 'snakl' || game === 'packl' || game === 'pourl') {
       qs = 'scores?game=eq.' + game + '&' + sel + '&order=score.desc&limit=' + (opts.limit || 25);
     } else {
       qs = 'scores?game=eq.yandl&' + sel;
