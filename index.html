@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>YanGames — Yandl, Rundl, Snakl, Packl &amp; Pourl</title>
+<title>YanGames — a little collection of games</title>
 <meta name="theme-color" content="#FBF7F0" />
-<meta name="description" content="YanGames — a tiny collection of daily games. Play Yandl, Rundl and Snakl." />
+<meta name="description" content="YanGames — a little collection of games. Brain training, arcade reflexes, puzzles & words." />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -16,14 +16,14 @@
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="YanGames" />
 <meta property="og:url" content="https://yandlgames.vercel.app/" />
-<meta property="og:title" content="YanGames — Yandl &amp; Rundl" />
-<meta property="og:description" content="Two little daily games. Guess the word in Yandl, run and dodge in Rundl." />
+<meta property="og:title" content="YanGames — a little collection of games" />
+<meta property="og:description" content="Brain training, arcade reflexes, puzzles & words. Pick a game, have some fun." />
 <meta property="og:image" content="https://yandlgames.vercel.app/og.png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="YanGames — Yandl &amp; Rundl" />
-<meta name="twitter:description" content="Two little daily games." />
+<meta name="twitter:title" content="YanGames — a little collection of games" />
+<meta name="twitter:description" content="Brain training, arcade reflexes, puzzles & words." />
 <meta name="twitter:image" content="https://yandlgames.vercel.app/og.png" />
 <script src="/pwa.js" defer></script>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -293,6 +293,42 @@ function RoutlIcon({ size }) {
   );
 }
 
+function CategorySection({ emoji, title, subtitle, marginTop, children }) {
+  return (
+    <div style={{ width: '100%', maxWidth: 620, marginTop: marginTop || 0 }}>
+      {/* Section heading */}
+      <div style={{ marginBottom: 20, paddingLeft: 4 }}>
+        <div style={{
+          fontFamily: 'var(--font-display)', fontWeight: 700,
+          fontSize: 20, color: 'var(--text-strong)',
+          display: 'flex', alignItems: 'center', gap: 8,
+        }}>
+          <span style={{ fontSize: 22 }}>{emoji}</span>
+          {title}
+        </div>
+        <div style={{
+          fontFamily: 'var(--font-body)', fontWeight: 500,
+          fontSize: 13, color: 'var(--text-muted)',
+          marginTop: 4, paddingLeft: 30,
+        }}>
+          {subtitle}
+        </div>
+      </div>
+
+      {/* Cards grid */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 280px))',
+        gap: 24,
+        width: '100%',
+        justifyContent: 'center',
+      }}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
 function GameCard({ title, subtitle, href, illustration, tileLogo, accentColor, accentBg, delay }) {
   var [hovered, setHovered] = React.useState(false);
   var [pressed, setPressed] = React.useState(false);
@@ -433,15 +469,211 @@ function WelcomeApp() {
         Pick a game, have some fun.
       </div>
 
-      {/* Game grid */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 280px))',
-        gap: 24,
-        width: '100%',
-        maxWidth: 620,
-        justifyContent: 'center',
-      }}>
+      {/* Categorized game sections */}
+
+      {/* 🧠 Brain Training */}
+      <CategorySection
+        emoji="🧠"
+        title="Brain Training"
+        subtitle="Train your memory, attention & focus"
+      >
+        {/* Memorl card */}
+        <GameCard
+          title="Memorl"
+          subtitle="Watch the pattern, tap it back"
+          href="Memorl/index.html"
+          accentColor="#C7B6E8"
+          accentBg="rgba(199,182,232,.32)"
+          delay={0}
+          illustration={
+            <div style={{ filter: 'drop-shadow(0 6px 14px rgba(46,42,40,.18))' }}>
+              <MemorlIcon size={92} />
+            </div>
+          }
+          tileLogo={
+            <TileLogo
+              letters={['M','E','M','O','R','L']}
+              colors={['#C7B6E8','#8FD3B6','#F4B942','#E8755C','#79D0E0','#F3A9C8']}
+              size={30}
+            />
+          }
+        />
+
+        {/* Brewl card */}
+        <GameCard
+          title="Brewl"
+          subtitle="Fill every cup, mind the spills"
+          href="Brewl/index.html"
+          accentColor="#9B6B3A"
+          accentBg="rgba(155,107,58,.30)"
+          delay={0.2}
+          illustration={
+            <div style={{ filter: 'drop-shadow(0 6px 14px rgba(46,42,40,.18))' }}>
+              <BrewlIcon size={92} />
+            </div>
+          }
+          tileLogo={
+            <TileLogo
+              letters={['B','R','E','W','L']}
+              colors={['#9B6B3A','#E8755C','#F4B942','#56C98A','#79D0E0']}
+              size={34}
+            />
+          }
+        />
+
+        {/* Trainl card */}
+        <GameCard
+          title="Trainl"
+          subtitle="Flip switches, route every train"
+          href="Trainl/index.html"
+          accentColor="#4FA3E0"
+          accentBg="rgba(79,163,224,.30)"
+          delay={0.4}
+          illustration={
+            <div style={{ filter: 'drop-shadow(0 6px 14px rgba(46,42,40,.18))' }}>
+              <TrainlIcon size={92} />
+            </div>
+          }
+          tileLogo={
+            <TileLogo
+              letters={['T','R','A','I','N','L']}
+              colors={['#E8755C','#4FA3E0','#56C98A','#F4B942','#9B6BD6','#79D0E0']}
+              size={30}
+            />
+          }
+        />
+      </CategorySection>
+
+      {/* 🕹️ Arcade & Reflexes */}
+      <CategorySection
+        emoji="🕹️"
+        title="Arcade & Reflexes"
+        subtitle="Quick hands, fast reflexes"
+        marginTop={48}
+      >
+        {/* Rundl card */}
+        <GameCard
+          title="Rundl"
+          subtitle="Run, jump, don't stop"
+          href="Rundl/index.html"
+          accentColor="#F4B942"
+          accentBg="var(--butter-soft)"
+          delay={0}
+          illustration={
+            <img
+              src="assets/illustrations/unicorn.png"
+              alt="Rundl mascot"
+              style={{
+                width: 100, height: 'auto',
+                filter: 'drop-shadow(0 6px 14px rgba(46,42,40,.18))',
+              }}
+            />
+          }
+          tileLogo={
+            <TileLogo
+              letters={['R','U','N','D','L']}
+              colors={['#E8755C','#F4D58D','#8FD3B6','#C7B6E8','#F4B942']}
+              size={34}
+            />
+          }
+        />
+
+        {/* Snakl card */}
+        <GameCard
+          title="Snakl"
+          subtitle="Guide your pet, eat, grow"
+          href="Snakl/index.html"
+          accentColor="#8FD3B6"
+          accentBg="rgba(143,211,182,.32)"
+          delay={0.2}
+          illustration={
+            <div style={{ filter: 'drop-shadow(0 6px 14px rgba(46,42,40,.18))' }}>
+              <SnakeIcon size={92} />
+            </div>
+          }
+          tileLogo={
+            <TileLogo
+              letters={['S','N','A','K','L']}
+              colors={['#8FD3B6','#F4B942','#E8755C','#C7B6E8','#A8D8EA']}
+              size={34}
+            />
+          }
+        />
+
+        {/* Packl card */}
+        <GameCard
+          title="Packl"
+          subtitle="Chomp the maze, dodge ghosts"
+          href="Packl/index.html"
+          accentColor="#F4B942"
+          accentBg="rgba(244,185,66,.32)"
+          delay={0.4}
+          illustration={
+            <div style={{ filter: 'drop-shadow(0 6px 14px rgba(46,42,40,.18))' }}>
+              <PacklIcon size={92} />
+            </div>
+          }
+          tileLogo={
+            <TileLogo
+              letters={['P','A','C','K','L']}
+              colors={['#F4B942','#E8755C','#F3A9C8','#79D0E0','#C7B6E8']}
+              size={34}
+            />
+          }
+        />
+
+        {/* Spacl card */}
+        <GameCard
+          title="Spacl"
+          subtitle="Fly, blast, survive the waves"
+          href="Spacl/index.html"
+          accentColor="#4FA3E0"
+          accentBg="rgba(79,163,224,.32)"
+          delay={0.6}
+          illustration={
+            <div style={{ filter: 'drop-shadow(0 6px 14px rgba(46,42,40,.18))' }}>
+              <SpaclIcon size={92} />
+            </div>
+          }
+          tileLogo={
+            <TileLogo
+              letters={['S','P','A','C','L']}
+              colors={['#4FA3E0','#8FD3B6','#F4B942','#E8755C','#C7B6E8']}
+              size={34}
+            />
+          }
+        />
+
+        {/* Slicl card */}
+        <GameCard
+          title="Slicl"
+          subtitle="Swipe to slice, dodge the bombs"
+          href="Slicl/index.html"
+          accentColor="#56C98A"
+          accentBg="rgba(86,201,138,.32)"
+          delay={0.8}
+          illustration={
+            <div style={{ filter: 'drop-shadow(0 6px 14px rgba(46,42,40,.18))' }}>
+              <SliclIcon size={92} />
+            </div>
+          }
+          tileLogo={
+            <TileLogo
+              letters={['S','L','I','C','L']}
+              colors={['#3FA35A','#F39B36','#E2483D','#F4D03F','#8E5BD0']}
+              size={34}
+            />
+          }
+        />
+      </CategorySection>
+
+      {/* 🧩 Puzzles & Words */}
+      <CategorySection
+        emoji="🧩"
+        title="Puzzles & Words"
+        subtitle="Take your time, think it through"
+        marginTop={48}
+      >
         {/* Yandl card */}
         <GameCard
           title="Yandl"
@@ -469,77 +701,6 @@ function WelcomeApp() {
           }
         />
 
-        {/* Rundl card */}
-        <GameCard
-          title="Rundl"
-          subtitle="Run, jump, don't stop"
-          href="Rundl/index.html"
-          accentColor="#F4B942"
-          accentBg="var(--butter-soft)"
-          delay={0.4}
-          illustration={
-            <img
-              src="assets/illustrations/unicorn.png"
-              alt="Rundl mascot"
-              style={{
-                width: 100, height: 'auto',
-                filter: 'drop-shadow(0 6px 14px rgba(46,42,40,.18))',
-              }}
-            />
-          }
-          tileLogo={
-            <TileLogo
-              letters={['R','U','N','D','L']}
-              colors={['#E8755C','#F4D58D','#8FD3B6','#C7B6E8','#F4B942']}
-              size={34}
-            />
-          }
-        />
-
-        {/* Snakl card */}
-        <GameCard
-          title="Snakl"
-          subtitle="Guide your pet, eat, grow"
-          href="Snakl/index.html"
-          accentColor="#8FD3B6"
-          accentBg="rgba(143,211,182,.32)"
-          delay={0.8}
-          illustration={
-            <div style={{ filter: 'drop-shadow(0 6px 14px rgba(46,42,40,.18))' }}>
-              <SnakeIcon size={92} />
-            </div>
-          }
-          tileLogo={
-            <TileLogo
-              letters={['S','N','A','K','L']}
-              colors={['#8FD3B6','#F4B942','#E8755C','#C7B6E8','#A8D8EA']}
-              size={34}
-            />
-          }
-        />
-
-        {/* Packl card */}
-        <GameCard
-          title="Packl"
-          subtitle="Chomp the maze, dodge ghosts"
-          href="Packl/index.html"
-          accentColor="#F4B942"
-          accentBg="rgba(244,185,66,.32)"
-          delay={1.2}
-          illustration={
-            <div style={{ filter: 'drop-shadow(0 6px 14px rgba(46,42,40,.18))' }}>
-              <PacklIcon size={92} />
-            </div>
-          }
-          tileLogo={
-            <TileLogo
-              letters={['P','A','C','K','L']}
-              colors={['#F4B942','#E8755C','#F3A9C8','#79D0E0','#C7B6E8']}
-              size={34}
-            />
-          }
-        />
-
         {/* Pourl card */}
         <GameCard
           title="Pourl"
@@ -547,7 +708,7 @@ function WelcomeApp() {
           href="Pourl/index.html"
           accentColor="#4FA3E0"
           accentBg="rgba(79,163,224,.32)"
-          delay={1.6}
+          delay={0.2}
           illustration={
             <div style={{ filter: 'drop-shadow(0 6px 14px rgba(46,42,40,.18))' }}>
               <PourlIcon size={92} />
@@ -562,116 +723,6 @@ function WelcomeApp() {
           }
         />
 
-        {/* Memorl card */}
-        <GameCard
-          title="Memorl"
-          subtitle="Watch the pattern, tap it back"
-          href="Memorl/index.html"
-          accentColor="#C7B6E8"
-          accentBg="rgba(199,182,232,.32)"
-          delay={2.0}
-          illustration={
-            <div style={{ filter: 'drop-shadow(0 6px 14px rgba(46,42,40,.18))' }}>
-              <MemorlIcon size={92} />
-            </div>
-          }
-          tileLogo={
-            <TileLogo
-              letters={['M','E','M','O','R','L']}
-              colors={['#C7B6E8','#8FD3B6','#F4B942','#E8755C','#79D0E0','#F3A9C8']}
-              size={30}
-            />
-          }
-        />
-
-        {/* Brewl card */}
-        <GameCard
-          title="Brewl"
-          subtitle="Fill every cup, mind the spills"
-          href="Brewl/index.html"
-          accentColor="#9B6B3A"
-          accentBg="rgba(155,107,58,.30)"
-          delay={2.4}
-          illustration={
-            <div style={{ filter: 'drop-shadow(0 6px 14px rgba(46,42,40,.18))' }}>
-              <BrewlIcon size={92} />
-            </div>
-          }
-          tileLogo={
-            <TileLogo
-              letters={['B','R','E','W','L']}
-              colors={['#9B6B3A','#E8755C','#F4B942','#56C98A','#79D0E0']}
-              size={34}
-            />
-          }
-        />
-
-        {/* Trainl card */}
-        <GameCard
-          title="Trainl"
-          subtitle="Flip switches, route every train"
-          href="Trainl/index.html"
-          accentColor="#4FA3E0"
-          accentBg="rgba(79,163,224,.30)"
-          delay={2.8}
-          illustration={
-            <div style={{ filter: 'drop-shadow(0 6px 14px rgba(46,42,40,.18))' }}>
-              <TrainlIcon size={92} />
-            </div>
-          }
-          tileLogo={
-            <TileLogo
-              letters={['T','R','A','I','N','L']}
-              colors={['#E8755C','#4FA3E0','#56C98A','#F4B942','#9B6BD6','#79D0E0']}
-              size={30}
-            />
-          }
-        />
-
-        {/* Spacl card */}
-        <GameCard
-          title="Spacl"
-          subtitle="Fly, blast, survive the waves"
-          href="Spacl/index.html"
-          accentColor="#4FA3E0"
-          accentBg="rgba(79,163,224,.32)"
-          delay={3.2}
-          illustration={
-            <div style={{ filter: 'drop-shadow(0 6px 14px rgba(46,42,40,.18))' }}>
-              <SpaclIcon size={92} />
-            </div>
-          }
-          tileLogo={
-            <TileLogo
-              letters={['S','P','A','C','L']}
-              colors={['#4FA3E0','#8FD3B6','#F4B942','#E8755C','#C7B6E8']}
-              size={34}
-            />
-          }
-        />
-
-        {/* Slicl card */}
-        <GameCard
-          title="Slicl"
-          subtitle="Swipe to slice, dodge the bombs"
-          href="Slicl/index.html"
-          accentColor="#56C98A"
-          accentBg="rgba(86,201,138,.32)"
-          delay={3.6}
-          illustration={
-            <div style={{ filter: 'drop-shadow(0 6px 14px rgba(46,42,40,.18))' }}>
-              <SliclIcon size={92} />
-            </div>
-          }
-          tileLogo={
-            <TileLogo
-              letters={['S','L','I','C','L']}
-              colors={['#3FA35A','#F39B36','#E2483D','#F4D03F','#8E5BD0']}
-              size={34}
-            />
-          }
-        />
-
         {/* Routl card */}
         <GameCard
           title="Routl"
@@ -679,7 +730,7 @@ function WelcomeApp() {
           href="Routl/index.html"
           accentColor="#4FA3E0"
           accentBg="rgba(79,163,224,.30)"
-          delay={4.0}
+          delay={0.4}
           illustration={
             <div style={{ filter: 'drop-shadow(0 6px 14px rgba(46,42,40,.18))' }}>
               <RoutlIcon size={92} />
@@ -693,7 +744,7 @@ function WelcomeApp() {
             />
           }
         />
-      </div>
+      </CategorySection>
 
       {/* Footer */}
       <div style={{
